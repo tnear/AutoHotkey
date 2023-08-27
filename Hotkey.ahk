@@ -34,3 +34,10 @@ Numpad0 & Numpad1::
 {
     MsgBox 'You pressed Numpad1 while holding down Numpad0.'
 }
+
+; Use 'Down' and 'Up' to specify key press type
+^k::
+{
+    ; make Ctrl+k send a capital 'S'
+    Send '{Shift Down}s{Shift Up}'
+}
