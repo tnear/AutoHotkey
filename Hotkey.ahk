@@ -1,12 +1,15 @@
 #Requires AutoHotkey v2
 #SingleInstance Force
 
-; Common AHK key codes:
+; Common AHK modifier symbols:
 ; ^ = Control
 ; + = shift
 ; ! = alt
 ; # = Windows key
 ; & = used to combine two keys
+; < = use left key pair (ex: left alt, left shift, ...)
+; > = use right key pair
+; ~ = triggers both the key and your callback. Ex: ~a::MsgBox will trigger both a message box and 'a' press.
 
 ; Ctrl+J
 ^j::
@@ -40,4 +43,11 @@ Numpad0 & Numpad1::
 {
     ; make Ctrl+k send a capital 'S'
     Send '{Shift Down}s{Shift Up}'
+}
+
+; multiple hotkeys for same callback (stacked vertically)
+^Numpad0::
+^Numpad1::
+{
+    MsgBox('You pressed either ctrl+numpad0 or ctrl+numpad1')
 }

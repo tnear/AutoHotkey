@@ -1,17 +1,20 @@
 #Requires AutoHotkey v2
 #SingleInstance Force
 
-; Common AHK key codes:
+; Common AHK modifier symbols:
 ; ^ = Control
 ; + = shift
 ; ! = alt
 ; # = Windows key
 ; & = used to combine two keys
+; < = use left key pair (ex: left alt, left shift, ...)
+; > = use right key pair
+; ~ = triggers both the key and your callback. Ex: ~a::MsgBox will trigger both a message box and 'a' press.
 
 ; replace after typing 'btw' plus an ending char
 ::btw::by the way
 
-; '*': replace immediately (no ending character)
+; '*': replace immediately (does not wait for ending character)
 :*:idk::i don't know
 
 ::windows::
