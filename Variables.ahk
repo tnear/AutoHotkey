@@ -12,6 +12,10 @@
         ; create alert 'myVar equals 5.'
         MsgBox('myVar equals ' myVar '.')
     }
+    else if (myVar = 6)
+    {
+        MsgBox('myVar == 6')
+    }
     else
     {
         MsgBox('myVar != 5')
