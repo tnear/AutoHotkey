@@ -1,10 +1,10 @@
-﻿#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2
 #SingleInstance Force
 
 ; Common AHK modifier symbols:
 ; ^ = Control
-; + = shift
-; ! = alt
+; + = Shift
+; ! = Alt
 ; # = Windows key
 
 ; Always enable NumLock
@@ -77,13 +77,31 @@ SetTitleMatchMode(2)
     ; Alt + Up to move current line up
     !Up::
     {
-        MoveLineUp()
+        moveLineUp()
     }
 
     ; Alt + Down to move current line down
     !Down::
     {
-        MoveLineDown()
+        moveLineDown()
+    }
+
+    ; Ctrl + Shift + X
+    ^+x::
+    {
+        cutCurrentLine()
+    }
+
+    ; Ctrl + Shift + C
+    ^+c::
+    {
+        copyCurrentLine()
+    }
+
+    ; Ctrl + G
+    ^g::
+    {
+        gotoLineNumber()
     }
 #HotIf
 
@@ -118,13 +136,25 @@ SetTitleMatchMode(2)
     ; Alt + Up to move current line up
     !Up::
     {
-        MoveLineUp()
+        moveLineUp()
     }
 
     ; Alt + Down to move current line down
     !Down::
     {
-        MoveLineDown()
+        moveLineDown()
+    }
+
+    ; Ctrl + Shift + X
+    ^+x::
+    {
+        cutCurrentLine()
+    }
+
+    ; Ctrl + Shift + C
+    ^+c::
+    {
+        copyCurrentLine()
     }
 #HotIf
 
@@ -152,6 +182,18 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+] to Page Down
     ^]::PgDn
+
+    ; Alt + Up to move current line up
+    !Up::
+    {
+        moveLineUp()
+    }
+
+    ; Alt + Down to move current line down
+    !Down::
+    {
+        moveLineDown()
+    }
 #HotIf
 
 #HotIf WinActive("ahk_exe chrome.exe")
@@ -324,7 +366,7 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
-MoveLineUp()
+moveLineUp()
 {
     currentClipboard := ClipboardAll() ; cache current clipboard
 
@@ -342,11 +384,11 @@ MoveLineUp()
     SendInput("{Enter}")
     SendInput("{Up}")
     SendInput("^v")
-    Sleep(25) ; necessary sleep
+    Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
 }
 
-MoveLineDown()
+moveLineDown()
 {
     currentClipboard := ClipboardAll() ; cache current clipboard
 
@@ -363,8 +405,70 @@ MoveLineDown()
     SendInput("{End}")
     SendInput("{Enter}")
     SendInput("^v")
-    Sleep(25) ; necessary sleep
+    Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
+}
+
+cutCurrentLine()
+{
+    ; move selection to front of line
+    SendInput("{Home}")
+
+    ; select going down
+    SendInput("{Shift Down}{Down}{Shift Up}")
+
+    ; cut this selection
+    SendInput("^x")
+    ClipWait
+}
+
+copyCurrentLine()
+{
+    ; move selection to front of line
+    SendInput("{Home}")
+
+    ; select going down
+    SendInput("{Shift Down}{Down}{Shift Up}")
+
+    ; cut this selection
+    SendInput("^c")
+    ClipWait
+
+    ; move cursor back to original line
+    SendINput("{Up}")
+}
+
+gotoLineNumber()
+{
+    ; convert the string to an integer
+    stringNumber := InputBox('Go to line number:').value
+
+    try
+    {
+        integerNumber := Integer(stringNumber)
+    }
+    catch TypeError
+    {
+        MsgBox('Error: unable to convert to integer')
+        return
+    }
+
+    if (integerNumber > 5000)
+    {
+        ; higher than this simple function is designed for
+        return
+    }
+
+    ; move cursor to start of document
+    SendInput("^{Home}")
+
+    ; move cursor down by repeatedly sending {Down}
+    currentLineNumber := 1
+    while (currentLineNumber < integerNumber)
+    {
+        SendInput("{Down}")   
+        currentLineNumber += 1
+    }
 }
 
 ; ---
