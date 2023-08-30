@@ -18,17 +18,17 @@ SetNumLockState 'AlwaysOn'
 SetTitleMatchMode(1)
 
 ; Ctrl+Backspace and Ctrl+Delete in MATLAB (not needed for editor because it already supports these):
-#HotIf WinActive("MATLAB R")
+#HotIf WinActive('MATLAB R')
     ; Ctrl+Backspace
-    ^BS::     Send("^+{left}{delete}")
+    ^BS::     Send('^+{left}{delete}')
 
     ; Ctrl+Delete
-    ^F12::    Send("^+{right}{delete}")
+    ^F12::    Send('^+{right}{delete}')
 #HotIf
 
 SetTitleMatchMode(2)
 
-#HotIf WinActive("ahk_exe MATLAB.exe")
+#HotIf WinActive('ahk_exe MATLAB.exe')
     ; Map Ctrl+D to End (default for Ctrl+D is Open)
     ^d::End
 
@@ -40,7 +40,7 @@ SetTitleMatchMode(2)
 #HotIf
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
-#HotIf !WinActive("ahk_exe VirtualBoxVM.exe")
+#HotIf !WinActive('ahk_exe VirtualBoxVM.exe')
     Delete::Home
     Pause::PgUp
     PrintScreen::PgDn
@@ -52,7 +52,7 @@ SetTitleMatchMode(2)
     ; maybe shift + PrtScr?
 #HotIf !WinActive()
 
-#HotIf WinActive("ahk_exe notepad.exe")
+#HotIf WinActive('ahk_exe notepad.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -62,16 +62,16 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput("{End}")
-        SendInput("{Enter}")
+        SendInput('{End}')
+        SendInput('{Enter}')
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 
     ; Alt + Up to move current line up
@@ -105,7 +105,7 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
-#HotIf WinActive("ahk_exe Rainlendar2.exe")
+#HotIf WinActive('ahk_exe Rainlendar2.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -113,25 +113,25 @@ SetTitleMatchMode(2)
     ^m::Home
 
     ; Ctrl+Backspace
-    ^BS::    SendInput("^+{left}{delete}")
+    ^BS::    SendInput('^+{left}{delete}')
 
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput("{End}")
-        SendInput("{Enter}")
+        SendInput('{End}')
+        SendInput('{Enter}')
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 
     ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
-    Tab::SendInput("    ")
+    Tab::SendInput('    ')
 
     ; Alt + Up to move current line up
     !Up::
@@ -158,7 +158,7 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
-#HotIf WinActive("ahk_exe firefox.exe")
+#HotIf WinActive('ahk_exe firefox.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -169,12 +169,12 @@ SetTitleMatchMode(2)
     ^m::Home
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
-    ; Note: Ctrl+Enter adds ".com" to URLs
+    ; Note: Ctrl+Enter adds '.com' to URLs
     ^+Enter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 
     ; Map Ctrl+[ to Page Up
@@ -196,7 +196,7 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
-#HotIf WinActive("ahk_exe chrome.exe")
+#HotIf WinActive('ahk_exe chrome.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -209,9 +209,9 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 
     ; Map Ctrl+[ to Page Up
@@ -221,7 +221,7 @@ SetTitleMatchMode(2)
     ^]::PgDn
 #HotIf
 
-#HotIf WinActive("ahk_exe powershell.exe")
+#HotIf WinActive('ahk_exe powershell.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -235,7 +235,7 @@ SetTitleMatchMode(2)
     +Space::SendInput('{Space}')
 #HotIf
 
-#HotIf WinActive("ahk_exe cmd.exe")
+#HotIf WinActive('ahk_exe cmd.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -246,62 +246,62 @@ SetTitleMatchMode(2)
     ^m::Home
 #HotIf
 
-#HotIf WinActive("ahk_exe WINWORD.exe")
+#HotIf WinActive('ahk_exe WINWORD.exe')
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     ^NumpadEnter::
     {
-        SendInput("{End}")
-        SendInput("{Enter}")
+        SendInput('{End}')
+        SendInput('{Enter}')
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     ^+NumpadEnter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 #HotIf
 
-#HotIf WinActive("ahk_exe MusicBee.exe")
+#HotIf WinActive('ahk_exe MusicBee.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput("^+{left}{delete}")
+    ^BS::    SendInput('^+{left}{delete}')
 #HotIf
 
 ; Media Player Classic
-#HotIf WinActive("ahk_exe mpc-hc64.exe")
+#HotIf WinActive('ahk_exe mpc-hc64.exe')
     ; Ctrl+W to Alt+F4 to close window
-    ^W::    SendInput("!{F4}")
+    ^W::    SendInput('!{F4}')
 
     ; Ctrl+Backspace
-    ^BS::    SendInput("^+{left}{delete}")
+    ^BS::    SendInput('^+{left}{delete}')
 #HotIf
 
 ; File Explorer
-#HotIf WinActive("ahk_exe explorer.exe")
+#HotIf WinActive('ahk_exe explorer.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput("^+{left}{delete}")
+    ^BS::    SendInput('^+{left}{delete}')
 
     ; Ctrl+K to use Find dialog in top right (like Firefox)
     ^k::^f
 #HotIf
 
-#HotIf WinActive("ahk_exe Audacity.exe")
+#HotIf WinActive('ahk_exe Audacity.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput("^+{left}{delete}")
+    ^BS::    SendInput('^+{left}{delete}')
 #HotIf
 
-#HotIf WinActive("ahk_exe EXCEL.exe")
+#HotIf WinActive('ahk_exe EXCEL.exe')
     ; Ctrl+Backspace
-    ^BS::    Send("^+{left}{delete}")
+    ^BS::    Send('^+{left}{delete}')
 
     ; Ctrl+Delete (F12 is already remapped to Delete)
-    ^F12::    Send("^+{right}{delete}")
+    ^F12::    Send('^+{right}{delete}')
 #HotIf
 
-#HotIf WinActive("ahk_exe notepad++.exe")
+#HotIf WinActive('ahk_exe notepad++.exe')
     ^WheelUp::
     ^WheelDown::
     {
@@ -326,10 +326,10 @@ SetTitleMatchMode(2)
             {
                 ctrlXCount := 0
 
-                Send("{Down}")
-                Send("{Home}{Home}")
-                SendInput("{Shift Down}{Up}{Shift Up}")
-                Send("^x")
+                Send('{Down}')
+                Send('{Home}{Home}')
+                SendInput('{Shift Down}{Up}{Shift Up}')
+                Send('^x')
             }
         }
         else
@@ -342,7 +342,7 @@ SetTitleMatchMode(2)
 #HotIf
 
 ; Microsoft PowerPoint
-#HotIf WinActive("ahk_exe POWERPNT.EXE")
+#HotIf WinActive('ahk_exe POWERPNT.EXE')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -353,16 +353,16 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput("{End}")
-        SendInput("{Enter}")
+        SendInput('{End}')
+        SendInput('{Enter}')
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
+        SendInput('{Home}')
+        SendInput('{Enter}')
+        SendInput('{Up}')
     }
 #HotIf
 
@@ -371,19 +371,19 @@ moveLineUp()
     currentClipboard := ClipboardAll() ; cache current clipboard
 
     ; select current line
-    SendInput("{End}")
-    SendInput("{Shift Down}{Home}{Shift Up}")
+    SendInput('{End}')
+    SendInput('{Shift Down}{Home}{Shift Up}')
 
     ; cut current text
-    SendInput("^x")
+    SendInput('^x')
     ClipWait
 
     ; insert cut line up one
-    SendInput("{Backspace}")
-    SendInput("{Home}")
-    SendInput("{Enter}")
-    SendInput("{Up}")
-    SendInput("^v")
+    SendInput('{Backspace}')
+    SendInput('{Home}')
+    SendInput('{Enter}')
+    SendInput('{Up}')
+    SendInput('^v')
     Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
 }
@@ -393,18 +393,18 @@ moveLineDown()
     currentClipboard := ClipboardAll() ; cache current clipboard
 
     ; select current line
-    SendInput("{End}")
-    SendInput("{Shift Down}{Home}{Shift Up}")
+    SendInput('{End}')
+    SendInput('{Shift Down}{Home}{Shift Up}')
 
     ; cut current text
-    SendInput("^x")
+    SendInput('^x')
     ClipWait
 
     ; insert cut line down one
-    SendInput("{Delete}")
-    SendInput("{End}")
-    SendInput("{Enter}")
-    SendInput("^v")
+    SendInput('{Delete}')
+    SendInput('{End}')
+    SendInput('{Enter}')
+    SendInput('^v')
     Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
 }
@@ -412,30 +412,30 @@ moveLineDown()
 cutCurrentLine()
 {
     ; move selection to front of line
-    SendInput("{Home}")
+    SendInput('{Home}')
 
     ; select going down
-    SendInput("{Shift Down}{Down}{Shift Up}")
+    SendInput('{Shift Down}{Down}{Shift Up}')
 
     ; cut this selection
-    SendInput("^x")
+    SendInput('^x')
     ClipWait
 }
 
 copyCurrentLine()
 {
     ; move selection to front of line
-    SendInput("{Home}")
+    SendInput('{Home}')
 
     ; select going down
-    SendInput("{Shift Down}{Down}{Shift Up}")
+    SendInput('{Shift Down}{Down}{Shift Up}')
 
     ; cut this selection
-    SendInput("^c")
+    SendInput('^c')
     ClipWait
 
     ; move cursor back to original line
-    SendINput("{Up}")
+    SendINput('{Up}')
 }
 
 gotoLineNumber()
@@ -460,13 +460,13 @@ gotoLineNumber()
     }
 
     ; move cursor to start of document
-    SendInput("^{Home}")
+    SendInput('^{Home}')
 
     ; move cursor down by repeatedly sending {Down}
     currentLineNumber := 1
     while (currentLineNumber < integerNumber)
     {
-        SendInput("{Down}")   
+        SendInput('{Down}')   
         currentLineNumber += 1
     }
 }
