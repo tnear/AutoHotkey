@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 
 ; Common AHK modifier symbols:
@@ -77,34 +77,13 @@ SetTitleMatchMode(2)
     ; Alt + Up to move current line up
     !Up::
     {
-        currentClipboard := ClipboardAll() ; cache current clipboard
-        SendInput("{End}")
-        SendInput("{Shift Down}{Home}{Shift Up}")
-        SendInput("^x")
-        Sleep(25) ; todo: try ClipWait function
-        SendInput("{Backspace}")
-        SendInput("{Home}")
-        SendInput("{Enter}")
-        SendInput("{Up}")
-        SendInput("^v")
-        Sleep(25)
-        A_Clipboard := currentClipboard ; restore clipboard
+        MoveLineUp()
     }
 
     ; Alt + Down to move current line down
     !Down::
     {
-        currentClipboard := ClipboardAll() ; cache current clipboard
-        SendInput("{End}")
-        SendInput("{Shift Down}{Home}{Shift Up}")
-        SendInput("^x")
-        Sleep(25) ; todo: try ClipWait function
-        SendInput("{Delete}")
-        SendInput("{End}")
-        SendInput("{Enter}")
-        SendInput("^v")
-        Sleep(25)
-        A_Clipboard := currentClipboard ; restore clipboard
+        MoveLineDown()
     }
 #HotIf
 
@@ -135,6 +114,18 @@ SetTitleMatchMode(2)
 
     ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
     Tab::SendInput("    ")
+
+    ; Alt + Up to move current line up
+    !Up::
+    {
+        MoveLineUp()
+    }
+
+    ; Alt + Down to move current line down
+    !Down::
+    {
+        MoveLineDown()
+    }
 #HotIf
 
 #HotIf WinActive("ahk_exe firefox.exe")
@@ -274,6 +265,38 @@ SetTitleMatchMode(2)
     {
         ; disable Ctrl+Wheel which changes font size
     }
+
+    /*
+    ; todo: check ctrl+L and ctrl+shift+x
+    ; Ctrl+X+X to cut current line
+    ctrlXCount := 0
+    lastCtrlXTime := 0
+    ~^x::
+    {
+        global ctrlXCount
+        global lastCtrlXTime
+
+        currentMS := A_TickCount
+        if (currentMS - lastCtrlXTime < 400) ; Check if less than # ms have passed
+        {
+            ctrlXCount++
+            if (ctrlXCount >= 2) ; Double Ctrl+X press
+            {
+                ctrlXCount := 0
+
+                Send("{Down}")
+                Send("{Home}{Home}")
+                SendInput("{Shift Down}{Up}{Shift Up}")
+                Send("^x")
+            }
+        }
+        else
+        {
+            ctrlXCount := 1
+        }
+        lastCtrlXTime := currentMS
+    }
+    */
 #HotIf
 
 ; Microsoft PowerPoint
@@ -300,5 +323,48 @@ SetTitleMatchMode(2)
         SendInput("{Up}")
     }
 #HotIf
+
+MoveLineUp()
+{
+    currentClipboard := ClipboardAll() ; cache current clipboard
+
+    ; select current line
+    SendInput("{End}")
+    SendInput("{Shift Down}{Home}{Shift Up}")
+
+    ; cut current text
+    SendInput("^x")
+    ClipWait
+
+    ; insert cut line up one
+    SendInput("{Backspace}")
+    SendInput("{Home}")
+    SendInput("{Enter}")
+    SendInput("{Up}")
+    SendInput("^v")
+    Sleep(25) ; necessary sleep
+    A_Clipboard := currentClipboard ; restore clipboard
+}
+
+MoveLineDown()
+{
+    currentClipboard := ClipboardAll() ; cache current clipboard
+
+    ; select current line
+    SendInput("{End}")
+    SendInput("{Shift Down}{Home}{Shift Up}")
+
+    ; cut current text
+    SendInput("^x")
+    ClipWait
+
+    ; insert cut line down one
+    SendInput("{Delete}")
+    SendInput("{End}")
+    SendInput("{Enter}")
+    SendInput("^v")
+    Sleep(25) ; necessary sleep
+    A_Clipboard := currentClipboard ; restore clipboard
+}
 
 ; ---
