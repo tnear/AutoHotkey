@@ -74,13 +74,13 @@ SetTitleMatchMode(2)
         SendInput('{Up}')
     }
 
-    ; Alt + Up to move current line up
+    ; Alt+Up to move current line up
     !Up::
     {
         moveLineUp()
     }
 
-    ; Alt + Down to move current line down
+    ; Alt+Down to move current line down
     !Down::
     {
         moveLineDown()
@@ -102,6 +102,12 @@ SetTitleMatchMode(2)
     ^g::
     {
         gotoLineNumber()
+    }
+
+    ^WheelUp::
+    ^WheelDown::
+    {
+        ; disable Ctrl+Wheel which changes font size
     }
 #HotIf
 
@@ -133,13 +139,13 @@ SetTitleMatchMode(2)
     ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
     Tab::SendInput('    ')
 
-    ; Alt + Up to move current line up
+    ; Alt+Up to move current line up
     !Up::
     {
         moveLineUp()
     }
 
-    ; Alt + Down to move current line down
+    ; Alt+Down to move current line down
     !Down::
     {
         moveLineDown()
@@ -183,13 +189,13 @@ SetTitleMatchMode(2)
     ; Map Ctrl+] to Page Down
     ^]::PgDn
 
-    ; Alt + Up to move current line up
+    ; Alt+Up to move current line up
     !Up::
     {
         moveLineUp()
     }
 
-    ; Alt + Down to move current line down
+    ; Alt+Down to move current line down
     !Down::
     {
         moveLineDown()
@@ -307,38 +313,6 @@ SetTitleMatchMode(2)
     {
         ; disable Ctrl+Wheel which changes font size
     }
-
-    /*
-    ; todo: check ctrl+L and ctrl+shift+x
-    ; Ctrl+X+X to cut current line
-    ctrlXCount := 0
-    lastCtrlXTime := 0
-    ~^x::
-    {
-        global ctrlXCount
-        global lastCtrlXTime
-
-        currentMS := A_TickCount
-        if (currentMS - lastCtrlXTime < 400) ; Check if less than # ms have passed
-        {
-            ctrlXCount++
-            if (ctrlXCount >= 2) ; Double Ctrl+X press
-            {
-                ctrlXCount := 0
-
-                Send('{Down}')
-                Send('{Home}{Home}')
-                SendInput('{Shift Down}{Up}{Shift Up}')
-                Send('^x')
-            }
-        }
-        else
-        {
-            ctrlXCount := 1
-        }
-        lastCtrlXTime := currentMS
-    }
-    */
 #HotIf
 
 ; Microsoft PowerPoint
@@ -363,6 +337,16 @@ SetTitleMatchMode(2)
         SendInput('{Home}')
         SendInput('{Enter}')
         SendInput('{Up}')
+    }
+#HotIf
+
+; Visual Studio Code
+#HotIf WinActive('ahk_exe code.exe')
+    ; Map Ctrl+Shift+M to delete line to left (like Ctrl+U in terminal)
+    ^+m::
+    {
+        SendInput('{Shift Down}{Home}{Shift Up}')
+        SendInput('{Delete}')
     }
 #HotIf
 
