@@ -40,7 +40,8 @@ SetTitleMatchMode(2)
 #HotIf
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
-#HotIf !WinActive('ahk_exe VirtualBoxVM.exe')
+; Note: this also checks the current computer name
+#HotIf !WinActive('ahk_exe VirtualBoxVM.exe') && A_ComputerName == 'LAPTOP-JSOBNV2D'
     Delete::Home
     Pause::PgUp
     PrintScreen::PgDn
@@ -48,8 +49,7 @@ SetTitleMatchMode(2)
 
     ; Enable delete and print screen after remapping 4 above:
     F12::Delete
-    F11::PrintScreen ; interferes with debugging
-    ; maybe shift + PrtScr?
+    F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
 #HotIf !WinActive()
 
 #HotIf WinActive('ahk_exe notepad.exe')

@@ -6,6 +6,7 @@
     concat()
     substring()
     regularExpressions()
+    regexShorthand()
     inString()
 }
 
@@ -36,13 +37,25 @@ regularExpressions()
 {
     SubPat := 0
     ; capture all characters ('XYZ') between 'abc' and '123'
-    foundPos := RegExMatch("QabcXYZ123", "abc(.*)123", &SubPat)
+    foundPos := RegExMatch('QabcXYZ123', 'abc(.*)123', &SubPat)
 
     ; foundPos = 2 ('a' is the 2nd letter in 'Qabc...')
     ;MsgBox(foundPos)
 
     ; SubPat[1] == 'XYZ'
     ;MsgBox(SubPat[1])
+
+}
+
+regexShorthand()
+{
+    ; can use a ~= b operator shorthand for RegExMatch(a, b)
+    foundPos := 'QabcXYZ123' ~= 'abc(.*)123'
+
+    ; foundPos = 2 ('a' is start of match and is 2nd character in LHS string)
+    MsgBox(foundPos)
+
+    MsgBox(A_ComputerName)
 }
 
 ; FoundPos := InStr(Haystack, Needle [, CaseSense, StartingPos, Occurrence])
@@ -50,7 +63,7 @@ regularExpressions()
 inString()
 {
     position := InStr('123abc789', 'abc')
+
     ; position == 4 because 'abc' starts at the 4th letter in the first argument
-    MsgBox(position)
-    
+    ;MsgBox(position)
 }
