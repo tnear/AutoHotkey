@@ -9,6 +9,9 @@
     regexShorthand()
     inString()
     stringReplace()
+    strLength()
+    ordinal()
+    formatFcn()
 }
 
 concat()
@@ -82,4 +85,34 @@ stringReplace()
     newText := StrReplace(text, A_Space, '+')
     ; newText == 'hello+world'
     ; MsgBox(newText)
+}
+
+strLength()
+{
+    str := 'hello'
+    len := StrLen(str)
+    ; len == 5
+    ; MsgBox(len)
+}
+
+; number := Ord(String)
+; ord() returns ascii value for first character in string
+ordinal()
+{
+    str := 'a'
+    num := Ord(str)
+
+    ; num == 97 because ascii for 'a' is 96
+    ; MsgBox(num)
+
+    str := 'abc'
+    num := Ord(str)
+    ; num still equals 97 because Ord() only looks at first character
+    ; MsgBox(num)
+}
+
+; String := Format(FormatStr , Values...)
+formatFcn()
+{
+    ; todo: 
 }

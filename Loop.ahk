@@ -1,8 +1,17 @@
 #Requires AutoHotkey v2
 #SingleInstance Force
 
-; Loop [Count]
 ^j::
+{
+    loopCount()
+    infiniteLoop()
+    forLoop()
+    whileLoop()
+    aIndex()
+}
+
+; Loop [Count]
+loopCount()
 {
     x := 0
     Loop 2
@@ -12,45 +21,41 @@
     }
 
     ; ouputs '2'
-    MsgBox(x)
+    ;MsgBox(x)
 }
 
-; Alt+J
-!j::
+infiniteLoop()
 {
-    ; infinite loop
     x := 0
     Loop
     {
         x += 1
+        ; use the break statement to exit a loop
         if (x = 25)
             break
     }
 
     ; outputs '25'
-    MsgBox(x)
+    ;MsgBox(x)
 }
 
-; For-loop
 ; Syntax:
-; For Value1 , Value2 in Expression
-
-^k::
+; For Value1 [, Value2] in Expression
+forLoop()
 {
     array := [0, 1, 2, 3]
 
     for (val in array)
     {
         ; 4 message boxes: 0, 1, 2, 3
-        MsgBox(val)
+        ;MsgBox(val)
     }
 }
-
 
 ; While loop
 ; Syntax:
 ; While Expression
-!k::
+whileLoop()
 {
     x := 0
     y := 10
@@ -61,5 +66,27 @@
     }
 
     ; outputs 10
-    MsgBox(x)
+    ;MsgBox(x)
+}
+
+; A_Index stores the current iteration index
+; A_Index=1 for iteration #1
+aIndex()
+{
+    str := 'hello'
+    result := ''
+
+    Loop StrLen(str)
+    {
+        ; get one character a a time
+        char := SubStr(str, A_Index, 1)
+
+        ; convert each letter to uppercase
+        ; note: a better solution is to call StrUpper on entire string,
+        ; this example is just to show A_Index
+        result .= StrUpper(char)
+    }
+
+    ; result == 'HELLO'
+    MsgBox(result)
 }
