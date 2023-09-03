@@ -348,6 +348,12 @@ SetTitleMatchMode(2)
         SendInput('{Shift Down}{Home}{Shift Up}')
         SendInput('{Delete}')
     }
+
+    ; Ctrl+Shift+C to lookup selected text
+    ^+c::
+    {
+        lookupSelectedTextOnGoogle()
+    }
 #HotIf
 
 moveLineUp()
@@ -450,9 +456,59 @@ gotoLineNumber()
     currentLineNumber := 1
     while (currentLineNumber < integerNumber)
     {
-        SendInput('{Down}')   
+        SendInput('{Down}')
         currentLineNumber += 1
     }
+}
+
+lookupSelectedTextOnGoogle()
+{
+    ; cache current clipboard
+    originalClipboard := ClipboardAll()
+
+    ; clear clipboard
+    A_Clipboard := ''
+
+    ; send Ctrl+C to copy text (note: this will copy entire line in VSCode if there is no selection)
+    SendInput('^c')
+    ClipWait(1)
+
+    ; Open Google search if there is selected text
+    if (A_Clipboard != '')
+    {
+        searchQuery := 'https://www.google.com/search?q=' . UriEncode(A_Clipboard)
+        Run(searchQuery)
+    }
+
+    A_Clipboard := originalClipboard ; restore clipboard
+}
+
+; Function to URL encode the text
+UriEncode(text)
+{
+    encodedText := ''
+
+    ; loop through each character in text
+    Loop StrLen(text)
+    {
+        ; get one character at a time
+        char := SubStr(text, A_Index, 1)
+
+        ; '~=' is shorthand for 'RegExMatch'
+        if (char ~= '[a-zA-Z0-9-_.~]')
+        {
+            ; these characters do not need to be encoded
+            encodedText .= char
+        }
+        else
+        {
+            ; encode this character with its ascii value
+            asciiValue := Format('{:02X}', Ord(char))
+            encodedText .= '%' . asciiValue
+        }
+    }
+
+    return encodedText
 }
 
 ; ---

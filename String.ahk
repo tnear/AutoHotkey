@@ -8,6 +8,7 @@
     regularExpressions()
     regexShorthand()
     inString()
+    stringReplace()
 }
 
 concat()
@@ -44,7 +45,6 @@ regularExpressions()
 
     ; SubPat[1] == 'XYZ'
     ;MsgBox(SubPat[1])
-
 }
 
 regexShorthand()
@@ -53,9 +53,9 @@ regexShorthand()
     foundPos := 'QabcXYZ123' ~= 'abc(.*)123'
 
     ; foundPos = 2 ('a' is start of match and is 2nd character in LHS string)
-    MsgBox(foundPos)
+    ; MsgBox(foundPos)
 
-    MsgBox(A_ComputerName)
+    ; MsgBox(A_ComputerName)
 }
 
 ; FoundPos := InStr(Haystack, Needle [, CaseSense, StartingPos, Occurrence])
@@ -66,4 +66,20 @@ inString()
 
     ; position == 4 because 'abc' starts at the 4th letter in the first argument
     ;MsgBox(position)
+}
+
+; ReplacedStr := StrReplace(Haystack, Needle [, ReplaceText, CaseSense, &OutputVarCount, Limit])
+stringReplace()
+{
+    ; replaces text
+    text := 'hello world'
+    newText := StrReplace(text, 'hello', 'hey')
+    ; newText == 'hey world'
+    ; MsgBox(newText)
+
+    ; replace space (have to use A_Space variable), useful for URLs
+    text := 'hello world'
+    newText := StrReplace(text, A_Space, '+')
+    ; newText == 'hello+world'
+    ; MsgBox(newText)
 }
