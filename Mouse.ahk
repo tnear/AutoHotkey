@@ -1,16 +1,17 @@
 #Requires AutoHotkey v2
 #SingleInstance Force
 
-^j::
+; Map to ` instead of a ctrl key b/c ctrl+click has a different behavior
+`::
 {
-    mouseMoveFcn()
+    ;mouseMoveFcn()
     clickFcn()
 }
 
 ; MouseMove X, Y [, Speed, Relative]
 mouseMoveFcn()
 {
-    ; from top left corner of screen, move mouse right 100 and down 200 
+    ; from top left corner of current screen, move mouse right 100 and down 200 
     MouseMove(100, 200)
 
     ; sleep 1000 ms (1 second)
@@ -33,5 +34,23 @@ mouseMoveFcn()
 ; Click [Options]
 clickFcn()
 {
-    ; todo
+    ; click at coordinates 500, 500
+    ;Click(500, 500)
+
+    ; Shift Click at 600, 600
+    ;Send '+{Click 600 600}'
+
+    ; move mouse cursor without clicking
+    clickCount := 0
+    ;Click(700, 600, clickCount)
+
+    ; double click at current location
+    clickCount := 2
+    ;Click(clickCount)
+
+    ; move cursor 100 pixels to right and 50 pixels down then single click
+    clickCount := 1
+    relative := 'Rel'
+    Click(100, 50, clickCount, relative)
+
 }
