@@ -114,5 +114,12 @@ ordinal()
 ; String := Format(FormatStr , Values...)
 formatFcn()
 {
-    ; todo: 
+    ; substitutes idx=2 then idx=1
+    s := Format('{2}, {1}!`r`n', 'World', 'Hello')
+    ; outputs 'Hello, World!\r\n'
+    ; MsgBox(s)
+
+    ; creates '41'
+    s := Format('{:02X}', Ord('A'))
+    ; MsgBox(s)
 }
