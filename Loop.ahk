@@ -8,6 +8,7 @@
     forLoop()
     whileLoop()
     aIndex()
+    parseFcn()
 }
 
 ; Loop [Count]
@@ -88,5 +89,18 @@ aIndex()
     }
 
     ; result == 'HELLO'
-    MsgBox(result)
+    ; MsgBox(result)
+}
+
+; Loop Parse String [, DelimiterChars, OmitChars]
+; The built-in variable A_LoopField exists within any parsing loop.
+; It contains the contents of the current substring (field) from InputVar.
+parseFcn()
+{
+    color := 'red,green,blue'
+    delimiterChar := ','
+    Loop Parse, color, delimiterChar
+    {
+        MsgBox('Color number ' . A_Index . ' is ' . A_LoopField)
+    }
 }

@@ -313,6 +313,12 @@ SetTitleMatchMode(2)
     {
         ; disable Ctrl+Wheel which changes font size
     }
+
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
+    {
+        lookupSelectedTextOnGoogle()
+    }
 #HotIf
 
 ; Microsoft PowerPoint
@@ -346,11 +352,11 @@ SetTitleMatchMode(2)
     ^+m::
     {
         SendInput('{Shift Down}{Home}{Shift Up}')
-        SendInput('{Delete}')
+        ; SendInput('{Delete}') ; may not be necessary to delete
     }
 
-    ; Ctrl+Shift+C to lookup selected text
-    ^+c::
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
     {
         lookupSelectedTextOnGoogle()
     }
