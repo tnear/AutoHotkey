@@ -8,7 +8,7 @@
 ; # = Windows key
 
 ; Always enable NumLock
-SetNumLockState 'AlwaysOn'
+SetNumLockState('AlwaysOn')
 
 ; Match MATLAB's Command window (not editor)
 ; 1 = Title must start with
@@ -62,16 +62,13 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput('{End}')
-        SendInput('{Enter}')
+        insertLineBelow()
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 
     ; Alt+Up to move current line up
@@ -86,19 +83,19 @@ SetTitleMatchMode(2)
         moveLineDown()
     }
 
-    ; Ctrl + Shift + X
+    ; Ctrl+Shift+X
     ^+x::
     {
         cutCurrentLine()
     }
 
-    ; Ctrl + Shift + C
+    ; Ctrl+Shift+C
     ^+c::
     {
         copyCurrentLine()
     }
 
-    ; Ctrl + G
+    ; Ctrl+G
     ^g::
     {
         gotoLineNumber()
@@ -108,6 +105,21 @@ SetTitleMatchMode(2)
     ^WheelDown::
     {
         ; disable Ctrl+Wheel which changes font size
+    }
+
+    ; Ctrl+K
+    ^k::
+    {
+        selectCurrentWord()
+    }
+
+    ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
+    Tab::SendInput('    ')
+
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
+    {
+        lookupSelectedTextOnGoogle()
     }
 #HotIf
 
@@ -124,16 +136,13 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput('{End}')
-        SendInput('{Enter}')
+        insertLineBelow()
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 
     ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
@@ -151,16 +160,28 @@ SetTitleMatchMode(2)
         moveLineDown()
     }
 
-    ; Ctrl + Shift + X
+    ; Ctrl+Shift+X
     ^+x::
     {
         cutCurrentLine()
     }
 
-    ; Ctrl + Shift + C
+    ; Ctrl+Shift+C
     ^+c::
     {
         copyCurrentLine()
+    }
+
+    ; Ctrl+K
+    ^k::
+    {
+        selectCurrentWord()
+    }
+
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
+    {
+        lookupSelectedTextOnGoogle()
     }
 #HotIf
 
@@ -178,9 +199,7 @@ SetTitleMatchMode(2)
     ; Note: Ctrl+Enter adds '.com' to URLs
     ^+Enter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 
     ; Map Ctrl+[ to Page Up
@@ -200,6 +219,12 @@ SetTitleMatchMode(2)
     {
         moveLineDown()
     }
+
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
+    {
+        lookupSelectedTextOnGoogle()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe chrome.exe')
@@ -215,9 +240,7 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 
     ; Map Ctrl+[ to Page Up
@@ -225,6 +248,12 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+] to Page Down
     ^]::PgDn
+
+    ; Ctrl+Shift+A to lookup selected text on the web
+    ^+a::
+    {
+        lookupSelectedTextOnGoogle()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe powershell.exe')
@@ -257,17 +286,14 @@ SetTitleMatchMode(2)
     ^Enter::
     ^NumpadEnter::
     {
-        SendInput('{End}')
-        SendInput('{Enter}')
+        insertLineBelow()
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     ^+NumpadEnter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 #HotIf
 
@@ -333,16 +359,13 @@ SetTitleMatchMode(2)
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
     {
-        SendInput('{End}')
-        SendInput('{Enter}')
+        insertLineBelow()
     }
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
     {
-        SendInput('{Home}')
-        SendInput('{Enter}')
-        SendInput('{Up}')
+        insertLineAbove()
     }
 #HotIf
 
@@ -431,7 +454,7 @@ copyCurrentLine()
     ClipWait
 
     ; move cursor back to original line
-    SendINput('{Up}')
+    SendInput('{Up}')
 }
 
 gotoLineNumber()
@@ -515,6 +538,35 @@ UriEncode(text)
     }
 
     return encodedText
+}
+
+; This simple function is intended for applications which do not have an
+; existing shortcut to do this. This function is not perfect.
+selectCurrentWord()
+{
+    ; move cursor past word (this moves past spaces)
+    SendInput('^{Right}')
+
+    ; move left one character (this assumes a word is trailed by one space)
+    SendInput('{Left}')
+
+    ; ctrl+shift+left to select the entire word
+    SendInput('^+{Left}')
+}
+
+; insert line below cursor and move cursor down to new line
+insertLineBelow()
+{
+    SendInput('{End}')
+    SendInput('{Enter}')
+}
+
+; insert line above cursor and move cursor up to new line
+insertLineAbove()
+{
+    SendInput('{Home}')
+    SendInput('{Enter}')
+    SendInput('{Up}')
 }
 
 ; ---
