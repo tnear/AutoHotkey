@@ -113,14 +113,14 @@ SetTitleMatchMode(2)
         selectCurrentWord()
     }
 
-    ; Map Tab to 4 spaces (default behavior is to cycle focus on dialog controls)
-    Tab::SendInput('    ')
-
     ; Ctrl+Shift+A to lookup selected text on the web
     ^+a::
     {
         lookupSelectedTextOnGoogle()
     }
+
+    ; move right word
+    ^l:: SendInput('^{Right}')
 #HotIf
 
 #HotIf WinActive('ahk_exe Rainlendar2.exe')
@@ -183,6 +183,18 @@ SetTitleMatchMode(2)
     {
         lookupSelectedTextOnGoogle()
     }
+
+    ; move right word
+    ^l:: SendInput('^{Right}')
+
+    ; move right word with selection
+    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+
+    ; move left word
+    ^h:: SendInput('^{Left}')
+
+    ; move left word with selection
+    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
 #HotIf
 
 #HotIf WinActive('ahk_exe firefox.exe')
@@ -268,6 +280,18 @@ SetTitleMatchMode(2)
 
     ; Map Shift+Space to Space. Most editors already do this but powershell does not.
     +Space::SendInput('{Space}')
+
+    ; move right word
+    ^l:: SendInput('^{Right}')
+
+    ; move right word with selection
+    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+
+    ; move left word
+    ^h:: SendInput('^{Left}')
+
+    ; move left word with selection
+    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
 #HotIf
 
 #HotIf WinActive('ahk_exe cmd.exe')
@@ -279,6 +303,18 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+M to Home
     ^m::Home
+
+    ; move right word
+    ^l:: SendInput('^{Right}')
+
+    ; move right word with selection
+    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+
+    ; move left word
+    ^h:: SendInput('^{Left}')
+
+    ; move left word with selection
+    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
@@ -295,6 +331,14 @@ SetTitleMatchMode(2)
     {
         insertLineAbove()
     }
+
+    ; Ctrl+Shift+X
+    ^+x::
+    {
+        cutCurrentLine()
+    }
+
+    ; NOte: Ctrl+Shift+C -- Word handles up/down with selection differently
 #HotIf
 
 #HotIf WinActive('ahk_exe MusicBee.exe')
@@ -371,13 +415,6 @@ SetTitleMatchMode(2)
 
 ; Visual Studio Code
 #HotIf WinActive('ahk_exe code.exe')
-    ; Map Ctrl+Shift+M to delete line to left (like Ctrl+U in terminal)
-    ^+m::
-    {
-        SendInput('{Shift Down}{Home}{Shift Up}')
-        ; SendInput('{Delete}') ; may not be necessary to delete
-    }
-
     ; Ctrl+Shift+A to lookup selected text on the web
     ^+a::
     {

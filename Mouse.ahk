@@ -11,7 +11,7 @@
 ; MouseMove X, Y [, Speed, Relative]
 mouseMoveFcn()
 {
-    ; from top left corner of current screen, move mouse right 100 and down 200 
+    ; from top left corner of current screen, move mouse right 100 and down 200
     MouseMove(100, 200)
 
     ; sleep 1000 ms (1 second)
