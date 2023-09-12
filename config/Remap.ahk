@@ -20,10 +20,10 @@ SetTitleMatchMode(1)
 ; Ctrl+Backspace and Ctrl+Delete in MATLAB (not needed for editor because it already supports these):
 #HotIf WinActive('MATLAB R')
     ; Ctrl+Backspace
-    ^BS::     Send('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 
     ; Ctrl+Delete
-    ^F12::    Send('^+{right}{delete}')
+    ^F12::SendInput('^+{Right}{Delete}')
 #HotIf
 
 SetTitleMatchMode(2)
@@ -37,6 +37,12 @@ SetTitleMatchMode(2)
 
     ; Map Alt+G to Open (default is Ctrl+D)
     !g::^d
+
+    ; Map Ctrl+Shift+Enter to insert line above and move cursor
+    ^+Enter::
+    {
+        insertLineAbove()
+    }
 #HotIf
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
@@ -107,8 +113,8 @@ SetTitleMatchMode(2)
         ; disable Ctrl+Wheel which changes font size
     }
 
-    ; Ctrl+K
-    ^k::
+    ; Ctrl+comma
+    ^,::
     {
         selectCurrentWord()
     }
@@ -119,8 +125,36 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
-    ; move right word
-    ^l:: SendInput('^{Right}')
+    ^l:: 
+    {
+        moveRightOneWord()
+    }
+
+    ^+l::
+    {
+        moveRightOneWordWithSelection()
+    }
+
+    ^j::
+    {
+        moveCursorDown()
+    }
+
+    ^+j::
+    {
+        moveCursorDownWithSelection()
+    }
+
+    ^k::
+    {
+        moveCursorUp()
+    }
+
+    ; move line up with selection
+    ^+k::
+    {
+        moveCursorUpWithSelection()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe Rainlendar2.exe')
@@ -131,7 +165,7 @@ SetTitleMatchMode(2)
     ^m::Home
 
     ; Ctrl+Backspace
-    ^BS::    SendInput('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
@@ -172,8 +206,8 @@ SetTitleMatchMode(2)
         copyCurrentLine()
     }
 
-    ; Ctrl+K
-    ^k::
+    ; Ctrl+comma
+    ^,::
     {
         selectCurrentWord()
     }
@@ -184,17 +218,45 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
-    ; move right word
-    ^l:: SendInput('^{Right}')
+    ^l:: 
+    {
+        moveRightOneWord()
+    }
 
-    ; move right word with selection
-    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+    ^+l::
+    {
+        moveRightOneWordWithSelection()
+    }
 
-    ; move left word
-    ^h:: SendInput('^{Left}')
+    ^h::
+    {
+        moveLeftOneWord()
+    }
 
-    ; move left word with selection
-    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
+    ^+h::
+    {
+        moveLeftOneWordWithSelection()
+    }
+    
+    ^j::
+    {
+        moveCursorDown()
+    }
+    
+    ^+j::
+    {
+        moveCursorDownWithSelection()
+    }
+
+    ^k::
+    {
+        moveCursorUp()
+    }
+
+    ^+k::
+    {
+        moveCursorUpWithSelection()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe firefox.exe')
@@ -281,17 +343,25 @@ SetTitleMatchMode(2)
     ; Map Shift+Space to Space. Most editors already do this but powershell does not.
     +Space::SendInput('{Space}')
 
-    ; move right word
-    ^l:: SendInput('^{Right}')
+    ^l:: 
+    {
+        moveRightOneWord()
+    }
 
-    ; move right word with selection
-    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+    ^+l::
+    {
+        moveRightOneWordWithSelection()
+    }
 
-    ; move left word
-    ^h:: SendInput('^{Left}')
+    ^h::
+    {
+        moveLeftOneWord()
+    }
 
-    ; move left word with selection
-    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
+    ^+h::
+    {
+        moveLeftOneWordWithSelection()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe cmd.exe')
@@ -304,17 +374,26 @@ SetTitleMatchMode(2)
     ; Map Ctrl+M to Home
     ^m::Home
 
-    ; move right word
-    ^l:: SendInput('^{Right}')
+    ^l:: 
+    {
+        moveRightOneWord()
+    }
 
-    ; move right word with selection
-    ^+l:: SendInput('{Shift Down}^{Right}{Shift Up}')
+    ^+l::
+    {
+        moveRightOneWordWithSelection()
+    }
 
-    ; move left word
-    ^h:: SendInput('^{Left}')
+    ^h::
+    {
+        moveLeftOneWord()
+    }
 
-    ; move left word with selection
-    ^+h:: SendInput('{Shift Down}^{Left}{Shift Up}')
+    ^+h::
+    {
+        moveLeftOneWordWithSelection()
+    }
+
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
@@ -343,22 +422,22 @@ SetTitleMatchMode(2)
 
 #HotIf WinActive('ahk_exe MusicBee.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 #HotIf
 
 ; Media Player Classic
 #HotIf WinActive('ahk_exe mpc-hc64.exe')
     ; Ctrl+W to Alt+F4 to close window
-    ^W::    SendInput('!{F4}')
+    ^W::SendInput('!{F4}')
 
     ; Ctrl+Backspace
-    ^BS::    SendInput('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 #HotIf
 
 ; File Explorer
 #HotIf WinActive('ahk_exe explorer.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 
     ; Ctrl+K to use Find dialog in top right (like Firefox)
     ^k::^f
@@ -366,15 +445,15 @@ SetTitleMatchMode(2)
 
 #HotIf WinActive('ahk_exe Audacity.exe')
     ; Ctrl+Backspace
-    ^BS::    SendInput('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 #HotIf
 
 #HotIf WinActive('ahk_exe EXCEL.exe')
     ; Ctrl+Backspace
-    ^BS::    Send('^+{left}{delete}')
+    ^BS::SendInput('^+{Left}{Delete}')
 
     ; Ctrl+Delete (F12 is already remapped to Delete)
-    ^F12::    Send('^+{right}{delete}')
+    ^F12::SendInput('^+{Right}{Delete}')
 #HotIf
 
 #HotIf WinActive('ahk_exe notepad++.exe')
@@ -604,6 +683,47 @@ insertLineAbove()
     SendInput('{Home}')
     SendInput('{Enter}')
     SendInput('{Up}')
+}
+
+; move cursor right one word using Ctrl+Right
+moveRightOneWord()
+{
+    SendInput('^{Right}')
+}
+
+moveRightOneWordWithSelection()
+{
+    SendInput('{Shift Down}^{Right}{Shift Up}')
+}
+
+moveLeftOneWord()
+{
+    SendInput('^{Left}')
+}
+
+moveLeftOneWordWithSelection()
+{
+    SendInput('{Shift Down}^{Left}{Shift Up}')
+}
+
+moveCursorDown()
+{
+    SendInput('{Down}')
+}
+
+moveCursorDownWithSelection()
+{
+    SendInput('{Shift Down}{Down}{Shift Up}')
+}
+
+moveCursorUp()
+{
+    SendInput('{Up}')
+}
+
+moveCursorUpWithSelection()
+{
+    SendInput('{Shift Down}{Up}{Shift Up}')
 }
 
 ; ---
