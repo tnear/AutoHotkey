@@ -514,10 +514,7 @@ moveLineUp()
     ClipWait
 
     ; insert cut line up one
-    SendInput('{Backspace}')
-    SendInput('{Home}')
-    SendInput('{Enter}')
-    SendInput('{Up}')
+    SendInput('{Backspace}{Home}{Enter}{Up}')
     SendInput('^v')
     Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
@@ -536,9 +533,7 @@ moveLineDown()
     ClipWait
 
     ; insert cut line down one
-    SendInput('{Delete}')
-    SendInput('{End}')
-    SendInput('{Enter}')
+    SendInput('{Delete}{End}{Enter}')
     SendInput('^v')
     Sleep(25) ; necessary sleep of 25ms
     A_Clipboard := currentClipboard ; restore clipboard
@@ -565,7 +560,7 @@ copyCurrentLine()
     ; select going down
     SendInput('{Shift Down}{Down}{Shift Up}')
 
-    ; cut this selection
+    ; copy this selection
     SendInput('^c')
     ClipWait
 
@@ -656,15 +651,82 @@ UriEncode(text)
     return encodedText
 }
 
+_checkIfAWordCharacterIsSelected()
+{
+    originalClipboard := ClipboardAll() ; cache clipboard
+
+    ; copy selection
+    SendInput('^c')
+    ClipWait
+    Sleep(10) ; necessary sleep
+
+    ; check if it's a word character using this regex
+    ; note: every char in here should be one in which ctrl+shift+{left,right} skips past
+    ret := A_Clipboard ~= '[a-zA-Z0-9_]'
+
+    A_Clipboard := originalClipboard ; restore clipboard
+
+    return ret
+}
+
+; returns TRUE for: |abc, a|bc, ab|c, abc| (where | is the cursor)
+; returns FALSE for all else: '| abc', 'abc |', ' .| ', etc.
+_checkIfCursorIsWithinWord()
+{
+    ; check if one char left is a word character
+    SendInput('+{Left}')
+    
+    isWord := _checkIfAWordCharacterIsSelected()
+
+    ; reset cursor
+    SendInput('{Left}{Right}')
+
+    if isWord
+    {
+        return 1
+    }
+
+    ; check if one char right is a word character
+    SendInput('+{Right}')
+
+    isWord := _checkIfAWordCharacterIsSelected()
+
+    ; reset cursor
+    SendInput('{Right}{Left}')
+    
+    return isWord
+}
+
 ; This simple function is intended for applications which do not have an
 ; existing shortcut to do this. This function is not perfect.
 selectCurrentWord()
 {
-    ; move cursor past word (this moves past spaces)
+    if !_checkIfCursorIsWithinWord()
+    {
+        return
+    }
+    
+    ; ctrl+right to move cursor past word (this moves past spaces)
     SendInput('^{Right}')
 
-    ; move left one character (this assumes a word is trailed by one space)
-    SendInput('{Left}')
+    Loop 100 ; avoid inf loop
+    {
+        ; shift+left: select one char left
+        SendInput('+{Left}')
+
+        ; break if it's a word character
+        foundWordChar := _checkIfAWordCharacterIsSelected()
+        if foundWordChar
+        {
+            break
+        }
+
+        ; clear selection with left
+        SendInput('{Left}')
+    }
+
+    ; move cursor back to right
+    SendInput('{Right}')
 
     ; ctrl+shift+left to select the entire word
     SendInput('^+{Left}')
@@ -673,16 +735,13 @@ selectCurrentWord()
 ; insert line below cursor and move cursor down to new line
 insertLineBelow()
 {
-    SendInput('{End}')
-    SendInput('{Enter}')
+    SendInput('{End}{Enter}')
 }
 
 ; insert line above cursor and move cursor up to new line
 insertLineAbove()
 {
-    SendInput('{Home}')
-    SendInput('{Enter}')
-    SendInput('{Up}')
+    SendInput('{Home}{Enter}{Up}')
 }
 
 ; move cursor right one word using Ctrl+Right

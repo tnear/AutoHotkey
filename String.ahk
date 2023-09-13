@@ -13,6 +13,7 @@
     ordinal()
     formatFcn()
     parseFcn()
+    relationalOperators()
 }
 
 concat()
@@ -134,6 +135,25 @@ parseFcn()
     delimiterChar := ','
     Loop Parse, color, delimiterChar
     {
-        MsgBox('Color number ' . A_Index . ' is ' . A_LoopField)
+        ;MsgBox('Color number ' . A_Index . ' is ' . A_LoopField)
     }
+}
+
+relationalOperators()
+{
+    s := 'hello'
+
+    ; result = 1 (true)
+    ; '=' does case insensitive compare
+    result := (s = 'HELLO')
+    ;MsgBox(result)
+
+    ; result = 1 (true)
+    ; '==' does case sensitive compare
+    result := (s == 'hello')
+    ;MsgBox(result)
+
+    ; result = 1 (true)
+    result := (s != 'world')
+    ;MsgBox(result)
 }
