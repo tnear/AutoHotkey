@@ -22,7 +22,7 @@ SetTitleMatchMode(1)
     ; Ctrl+Backspace
     ^BS::SendInput('^+{Left}{Delete}')
 
-    ; Ctrl+Delete
+    ; Ctrl+Delete (F12 is remapped to Delete)
     ^F12::SendInput('^+{Right}{Delete}')
 #HotIf
 
@@ -125,7 +125,7 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
-    ^l:: 
+    ^l::
     {
         moveRightOneWord()
     }
@@ -133,6 +133,11 @@ SetTitleMatchMode(2)
     ^+l::
     {
         moveRightOneWordWithSelection()
+    }
+
+    ^+h::
+    {
+        moveLeftOneWordWithSelection()
     }
 
     ^j::
@@ -218,7 +223,7 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
-    ^l:: 
+    ^l::
     {
         moveRightOneWord()
     }
@@ -237,12 +242,12 @@ SetTitleMatchMode(2)
     {
         moveLeftOneWordWithSelection()
     }
-    
+
     ^j::
     {
         moveCursorDown()
     }
-    
+
     ^+j::
     {
         moveCursorDownWithSelection()
@@ -256,6 +261,12 @@ SetTitleMatchMode(2)
     ^+k::
     {
         moveCursorUpWithSelection()
+    }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
     }
 #HotIf
 
@@ -343,7 +354,7 @@ SetTitleMatchMode(2)
     ; Map Shift+Space to Space. Most editors already do this but powershell does not.
     +Space::SendInput('{Space}')
 
-    ^l:: 
+    ^l::
     {
         moveRightOneWord()
     }
@@ -374,7 +385,7 @@ SetTitleMatchMode(2)
     ; Map Ctrl+M to Home
     ^m::Home
 
-    ^l:: 
+    ^l::
     {
         moveRightOneWord()
     }
@@ -417,7 +428,19 @@ SetTitleMatchMode(2)
         cutCurrentLine()
     }
 
-    ; NOte: Ctrl+Shift+C -- Word handles up/down with selection differently
+    ; Note: Ctrl+Shift+C -- Word handles up/down with selection differently
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe MusicBee.exe')
@@ -467,6 +490,23 @@ SetTitleMatchMode(2)
     ^+a::
     {
         lookupSelectedTextOnGoogle()
+    }
+
+    ; Ctrl+<comma>: select current word
+    ^,::
+    {
+        ; Note: this doesn't work when the cursor is at the far right of the last word on the line
+        ;SendInput('{Right}^{Left}^+{Right}')
+
+        ; works better but requires opening the Find dialog then immediately closing:
+        SendInput('^f{Escape}')
+    }
+
+    ; Ctrl+Shift+Backspace -- Notepad++ natively supports this but it deletes to column 0
+    ; instead of ignoring leading whitespace
+    ^+Backspace::
+    {
+        deleteLineLeft()
     }
 #HotIf
 
@@ -675,7 +715,7 @@ _checkIfCursorIsWithinWord()
 {
     ; check if one char left is a word character
     SendInput('+{Left}')
-    
+
     isWord := _checkIfAWordCharacterIsSelected()
 
     ; reset cursor
@@ -693,7 +733,7 @@ _checkIfCursorIsWithinWord()
 
     ; reset cursor
     SendInput('{Right}{Left}')
-    
+
     return isWord
 }
 
@@ -703,9 +743,9 @@ selectCurrentWord()
 {
     if !_checkIfCursorIsWithinWord()
     {
-        return
+        return ; no word to select, return early
     }
-    
+
     ; ctrl+right to move cursor past word (this moves past spaces)
     SendInput('^{Right}')
 
@@ -783,6 +823,16 @@ moveCursorUp()
 moveCursorUpWithSelection()
 {
     SendInput('{Shift Down}{Up}{Shift Up}')
+}
+
+deleteLineLeft()
+{
+    SendInput('{Shift Down}{Home}{Shift Up}{Delete}')
+}
+
+deleteLineRight()
+{
+    SendInput('{Shift Down}{End}{Shift Up}{Delete}')
 }
 
 ; ---
