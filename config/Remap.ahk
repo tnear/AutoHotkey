@@ -43,6 +43,18 @@ SetTitleMatchMode(2)
     {
         insertLineAbove()
     }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
@@ -159,6 +171,15 @@ SetTitleMatchMode(2)
     ^+k::
     {
         moveCursorUpWithSelection()
+    }
+
+    ; map Ctrl+/ to Ctrl+H (replace)
+    ^/::^h
+
+    ; Ctrl+H to move left
+    ^h::
+    {
+        moveLeftOneWord()
     }
 #HotIf
 
@@ -310,6 +331,18 @@ SetTitleMatchMode(2)
     {
         lookupSelectedTextOnGoogle()
     }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe chrome.exe')
@@ -338,6 +371,18 @@ SetTitleMatchMode(2)
     ^+a::
     {
         lookupSelectedTextOnGoogle()
+    }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
     }
 #HotIf
 
@@ -373,6 +418,18 @@ SetTitleMatchMode(2)
     {
         moveLeftOneWordWithSelection()
     }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe cmd.exe')
@@ -405,6 +462,17 @@ SetTitleMatchMode(2)
         moveLeftOneWordWithSelection()
     }
 
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
