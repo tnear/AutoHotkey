@@ -144,12 +144,12 @@ SetTitleMatchMode(2)
 
     ^+l::
     {
-        moveRightOneWordWithSelection()
+        moveCursorRightOneWordWithSelection()
     }
 
     ^+h::
     {
-        moveLeftOneWordWithSelection()
+        moveCursorLeftOneWordWithSelection()
     }
 
     ^j::
@@ -181,6 +181,16 @@ SetTitleMatchMode(2)
     {
         moveLeftOneWord()
     }
+
+    ; disable Ctrl+{=,-} to zoom
+    ^=::
+    ^-::
+    {
+    }
+
+    ; use Ctrl+Shift+{=,-} to zoom instead
+    ^+=::^=
+    ^+-::^-
 #HotIf
 
 #HotIf WinActive('ahk_exe Rainlendar2.exe')
@@ -251,7 +261,7 @@ SetTitleMatchMode(2)
 
     ^+l::
     {
-        moveRightOneWordWithSelection()
+        moveCursorRightOneWordWithSelection()
     }
 
     ^h::
@@ -261,7 +271,7 @@ SetTitleMatchMode(2)
 
     ^+h::
     {
-        moveLeftOneWordWithSelection()
+        moveCursorLeftOneWordWithSelection()
     }
 
     ^j::
@@ -406,7 +416,7 @@ SetTitleMatchMode(2)
 
     ^+l::
     {
-        moveRightOneWordWithSelection()
+        moveCursorRightOneWordWithSelection()
     }
 
     ^h::
@@ -416,7 +426,7 @@ SetTitleMatchMode(2)
 
     ^+h::
     {
-        moveLeftOneWordWithSelection()
+        moveCursorLeftOneWordWithSelection()
     }
 
     ; Ctrl+Shift+Backspace
@@ -449,7 +459,7 @@ SetTitleMatchMode(2)
 
     ^+l::
     {
-        moveRightOneWordWithSelection()
+        moveCursorRightOneWordWithSelection()
     }
 
     ^h::
@@ -459,7 +469,7 @@ SetTitleMatchMode(2)
 
     ^+h::
     {
-        moveLeftOneWordWithSelection()
+        moveCursorLeftOneWordWithSelection()
     }
 
     ; Ctrl+Shift+Backspace
@@ -508,6 +518,51 @@ SetTitleMatchMode(2)
     ^+F12::
     {
         deleteLineRight()
+    }
+
+    ^l::
+    {
+        moveRightOneWord()
+    }
+
+    ^+l::
+    {
+        moveCursorRightOneWordWithSelection()
+    }
+
+    ^+h::
+    {
+        moveCursorLeftOneWordWithSelection()
+    }
+
+    ^j::
+    {
+        moveCursorDown()
+    }
+
+    ^+j::
+    {
+        moveCursorDownWithSelection()
+    }
+
+    ^k::
+    {
+        moveCursorUp()
+    }
+
+    ; move line up with selection
+    ^+k::
+    {
+        moveCursorUpWithSelection()
+    }
+
+    ; map Ctrl+/ to Ctrl+H (replace)
+    ^/::^h
+
+    ; Ctrl+H to move left
+    ^h::
+    {
+        moveLeftOneWord()
     }
 #HotIf
 
@@ -563,7 +618,7 @@ SetTitleMatchMode(2)
     ; Ctrl+<comma>: select current word
     ^,::
     {
-        ; Note: this doesn't work when the cursor is at the far right of the last word on the line
+        ; Note: this doesn't work when the cursor is at the far right of the last word on a line
         ;SendInput('{Right}^{Left}^+{Right}')
 
         ; works better but requires opening the Find dialog then immediately closing:
@@ -858,7 +913,7 @@ moveRightOneWord()
     SendInput('^{Right}')
 }
 
-moveRightOneWordWithSelection()
+moveCursorRightOneWordWithSelection()
 {
     SendInput('{Shift Down}^{Right}{Shift Up}')
 }
@@ -868,7 +923,7 @@ moveLeftOneWord()
     SendInput('^{Left}')
 }
 
-moveLeftOneWordWithSelection()
+moveCursorLeftOneWordWithSelection()
 {
     SendInput('{Shift Down}^{Left}{Shift Up}')
 }
