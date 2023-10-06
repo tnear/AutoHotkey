@@ -67,7 +67,8 @@ SetTitleMatchMode(2)
 
     ; Enable delete and print screen after remapping 4 above:
     F12::Delete
-    F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
+    ; F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
+    +F11::PrintScreen
 #HotIf !WinActive()
 
 #HotIf WinActive('ahk_exe notepad.exe')
@@ -353,6 +354,11 @@ SetTitleMatchMode(2)
     {
         deleteLineRight()
     }
+
+    ; disable right to left alignment toggle (Ctrl+Shift+X)
+    ^+x::
+    {
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe chrome.exe')
@@ -485,6 +491,69 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
+#HotIf WinActive('ahk_exe WindowsTerminal.exe')
+    ; Map Ctrl+D to End
+    ^d::End
+
+    ; Map Ctrl+E to Ctrl+D
+    ^e::^d
+
+    ; Map Ctrl+M to Home
+    ^m::Home
+
+    ; Map Shift+Space to Space. Most editors already do this but terminal/powershell does not.
+    +Space::SendInput('{Space}')
+
+    ^l::
+    {
+        moveRightOneWord()
+    }
+
+    ^+l::
+    {
+        moveCursorRightOneWordWithSelection()
+    }
+
+    ^h::
+    {
+        moveLeftOneWord()
+    }
+
+    ^+h::
+    {
+        moveCursorLeftOneWordWithSelection()
+    }
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
+
+    ^WheelUp::
+    ^WheelDown::
+    {
+        ; disable Ctrl+Wheel which changes font size
+    }
+
+    ; disable Ctrl+{=,-} to zoom
+    ^=::
+    ^-::
+    {
+        ; do nothing
+    }
+
+    ; use Ctrl+Shift+{=,-} to zoom instead
+    ^+=::^=
+    ^+-::^-
+#HotIf
+
 #HotIf WinActive('ahk_exe WINWORD.exe')
     ; Map Ctrl+Enter to insert line below and move cursor
     ^Enter::
@@ -563,6 +632,13 @@ SetTitleMatchMode(2)
     ^h::
     {
         moveLeftOneWord()
+    }
+
+    ; Ctrl+comma to select current word
+    ^,::
+    {
+        ; F8 enters extended mode, F8x2 selects word, Escape exits
+        SendInput('{F8}{F8}{Esc}')
     }
 #HotIf
 
