@@ -7,8 +7,10 @@
 ; ! = Alt
 ; # = Windows key
 
-; Always enable NumLock
-SetNumLockState('AlwaysOn')
+#HotIf A_ComputerName == 'LAPTOP-JSOBNV2D'
+    ; Enable NumLock
+    SetNumLockState('AlwaysOn')
+#HotIf
 
 ; Match MATLAB's Command window (not editor)
 ; 1 = Title must start with
