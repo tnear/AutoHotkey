@@ -7,10 +7,11 @@
 ; ! = Alt
 ; # = Windows key
 
-#HotIf A_ComputerName == 'LAPTOP-JSOBNV2D'
+if A_ComputerName == 'LAPTOP-JSOBNV2D'
+{
     ; Enable NumLock
     SetNumLockState('AlwaysOn')
-#HotIf
+}
 
 ; Match MATLAB's Command window (not editor)
 ; 1 = Title must start with
@@ -61,16 +62,19 @@ SetTitleMatchMode(2)
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
 ; Note: this also checks the current computer name
-#HotIf !WinActive('ahk_exe VirtualBoxVM.exe') && A_ComputerName == 'LAPTOP-JSOBNV2D'
-    Delete::Home
-    Pause::PgUp
-    PrintScreen::PgDn
-    Home::End
+#HotIf !WinActive('ahk_exe VirtualBoxVM.exe')
+    if A_ComputerName == 'LAPTOP-JSOBNV2D'
+    {
+        Delete::Home
+        Pause::PgUp
+        PrintScreen::PgDn
+        Home::End
 
-    ; Enable delete and print screen after remapping 4 above:
-    F12::Delete
-    ; F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
-    +F11::PrintScreen
+        ; Enable delete and print screen after remapping 4 above:
+        F12::Delete
+        ; F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
+        +F11::PrintScreen
+    }
 #HotIf !WinActive()
 
 #HotIf WinActive('ahk_exe notepad.exe')
