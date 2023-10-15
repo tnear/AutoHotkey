@@ -362,6 +362,23 @@ SetTitleMatchMode(2)
     ^+x::
     {
     }
+
+    ; Ctrl+H to move left
+    ^h::
+    {
+        moveLeftOneWord()
+    }
+
+    ^+h::
+    {
+        moveCursorLeftOneWordWithSelection()
+    }
+
+    ; Ctrl+comma
+    ^,::
+    {
+        selectCurrentWord()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe chrome.exe')
@@ -403,31 +420,8 @@ SetTitleMatchMode(2)
     {
         deleteLineRight()
     }
-#HotIf
 
-#HotIf WinActive('ahk_exe powershell.exe')
-    ; Map Ctrl+D to End
-    ^d::End
-
-    ; Map Ctrl+E to Ctrl+D
-    ^e::^d
-
-    ; Map Ctrl+M to Home
-    ^m::Home
-
-    ; Map Shift+Space to Space. Most editors already do this but powershell does not.
-    +Space::SendInput('{Space}')
-
-    ^l::
-    {
-        moveRightOneWord()
-    }
-
-    ^+l::
-    {
-        moveCursorRightOneWordWithSelection()
-    }
-
+    ; Ctrl+H to move left
     ^h::
     {
         moveLeftOneWord()
@@ -438,63 +432,14 @@ SetTitleMatchMode(2)
         moveCursorLeftOneWordWithSelection()
     }
 
-    ; Ctrl+Shift+Backspace
-    ^+Backspace::
+    ; Ctrl+comma
+    ^,::
     {
-        deleteLineLeft()
-    }
-
-    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
-    ^+F12::
-    {
-        deleteLineRight()
+        selectCurrentWord()
     }
 #HotIf
 
-#HotIf WinActive('ahk_exe cmd.exe')
-    ; Map Ctrl+D to End
-    ^d::End
-
-    ; Map Ctrl+E to Ctrl+D
-    ^e::^d
-
-    ; Map Ctrl+M to Home
-    ^m::Home
-
-    ^l::
-    {
-        moveRightOneWord()
-    }
-
-    ^+l::
-    {
-        moveCursorRightOneWordWithSelection()
-    }
-
-    ^h::
-    {
-        moveLeftOneWord()
-    }
-
-    ^+h::
-    {
-        moveCursorLeftOneWordWithSelection()
-    }
-
-    ; Ctrl+Shift+Backspace
-    ^+Backspace::
-    {
-        deleteLineLeft()
-    }
-
-    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
-    ^+F12::
-    {
-        deleteLineRight()
-    }
-#HotIf
-
-#HotIf WinActive('ahk_exe WindowsTerminal.exe')
+#HotIf WinActive('ahk_exe WindowsTerminal.exe') or WinActive('ahk_exe powershell.exe') or WinActive('ahk_exe cmd.exe')
     ; Map Ctrl+D to End
     ^d::End
 
@@ -555,6 +500,15 @@ SetTitleMatchMode(2)
     ; use Ctrl+Shift+{=,-} to zoom instead
     ^+=::^=
     ^+-::^-
+
+    /*
+    needs separate function
+    ; Ctrl+comma
+    ^,::
+    {
+        selectCurrentWord()
+    }
+    */
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
@@ -648,6 +602,12 @@ SetTitleMatchMode(2)
 #HotIf WinActive('ahk_exe MusicBee.exe')
     ; Ctrl+Backspace
     ^BS::SendInput('^+{Left}{Delete}')
+
+    ; Map Ctrl+M to Home
+    ^m::Home
+
+    ; Map Ctrl+D to End
+    ^d::End
 #HotIf
 
 ; Media Player Classic
@@ -700,7 +660,7 @@ SetTitleMatchMode(2)
         ; Note: this doesn't work when the cursor is at the far right of the last word on a line
         ;SendInput('{Right}^{Left}^+{Right}')
 
-        ; works better but requires opening the Find dialog then immediately closing:
+        ; works but requires opening the Find dialog then immediately closing:
         SendInput('^f{Escape}')
     }
 
@@ -740,6 +700,12 @@ SetTitleMatchMode(2)
     ^+a::
     {
         lookupSelectedTextOnGoogle()
+    }
+
+    ; Ctrl+Shift+C to copy current line (without newline)
+    ^+c::
+    {
+        SendInput('{End}{Shift Down}{Home}{Shift Up}^c')
     }
 #HotIf
 
@@ -810,6 +776,7 @@ copyCurrentLine()
     SendInput('{Up}')
 }
 
+; a prototype function
 gotoLineNumber()
 {
     ; convert the string to an integer
