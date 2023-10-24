@@ -129,7 +129,7 @@ SetTitleMatchMode(2)
         ; disable Ctrl+Wheel which changes font size
     }
 
-    ; Ctrl+comma
+    ; Ctrl+Comma
     ^,::
     {
         selectCurrentWord()
@@ -189,6 +189,8 @@ SetTitleMatchMode(2)
     ; disable Ctrl+{=,-} to zoom
     ^=::
     ^-::
+    ^NumpadAdd::
+    ^NumpadSub::
     {
     }
 
@@ -246,7 +248,7 @@ SetTitleMatchMode(2)
         copyCurrentLine()
     }
 
-    ; Ctrl+comma
+    ; Ctrl+Comma
     ^,::
     {
         selectCurrentWord()
@@ -358,11 +360,6 @@ SetTitleMatchMode(2)
         deleteLineRight()
     }
 
-    ; disable right to left alignment toggle (Ctrl+Shift+X)
-    ^+x::
-    {
-    }
-
     ; Ctrl+H to move left
     ^h::
     {
@@ -374,10 +371,22 @@ SetTitleMatchMode(2)
         moveCursorLeftOneWordWithSelection()
     }
 
-    ; Ctrl+comma
+    ; Ctrl+Comma
     ^,::
     {
         selectCurrentWord()
+    }
+
+    ; Ctrl+Shift+X
+    ^+x::
+    {
+        cutCurrentLine()
+    }
+
+    ; Ctrl+Shift+C
+    ^+c::
+    {
+        copyCurrentLine()
     }
 #HotIf
 
@@ -432,10 +441,29 @@ SetTitleMatchMode(2)
         moveCursorLeftOneWordWithSelection()
     }
 
-    ; Ctrl+comma
+    ; Ctrl+Comma
     ^,::
     {
         selectCurrentWord()
+    }
+
+    ; Ctrl+Shift+P, create new private window
+    ; This rule aligns Chrome with Firefox
+    ^+p::
+    {
+        SendInput('^+n')
+    }
+
+    ; Ctrl+Shift+X
+    ^+x::
+    {
+        cutCurrentLine()
+    }
+
+    ; Ctrl+Shift+C
+    ^+c::
+    {
+        copyCurrentLine()
     }
 #HotIf
 
@@ -493,6 +521,8 @@ SetTitleMatchMode(2)
     ; disable Ctrl+{=,-} to zoom
     ^=::
     ^-::
+    ^NumpadAdd::
+    ^NumpadSub::
     {
         ; do nothing
     }
@@ -501,23 +531,24 @@ SetTitleMatchMode(2)
     ^+=::^=
     ^+-::^-
 
-    /*
-    needs separate function
-    ; Ctrl+comma
+    ; Ctrl+Comma
     ^,::
     {
-        selectCurrentWord()
+        selectCurrentWordBasic()
     }
-    */
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
+    
+    /*
     ; Map Ctrl+Enter to insert line below and move cursor
+    ; Note: currently disabled, interferes with Insert Page Break
     ^Enter::
     ^NumpadEnter::
     {
         insertLineBelow()
     }
+    */
 
     ; Map Ctrl+Shift+Enter to insert line above and move cursor
     ^+Enter::
@@ -591,7 +622,7 @@ SetTitleMatchMode(2)
         moveLeftOneWord()
     }
 
-    ; Ctrl+comma to select current word
+    ; Ctrl+Comma to select current word
     ^,::
     {
         ; F8 enters extended mode, F8x2 selects word, Escape exits
@@ -631,6 +662,47 @@ SetTitleMatchMode(2)
 #HotIf WinActive('ahk_exe Audacity.exe')
     ; Ctrl+Backspace
     ^BS::SendInput('^+{Left}{Delete}')
+    
+    ; utility to balance audio, clear metadata tags, and export over original file
+    ; ctrl+shift+a
+    ^+a::
+    {
+        ; select all audio
+        SendInput('^a')
+
+        ; open Effect menu (alt+c)
+        SendInput('!c')
+
+        ; choose Volume and Compression then Amplify...
+        SendInput('{Down}{Down}{Down}{Right}{Enter}')
+
+        ; balance audio by choosing the default amplification
+        SendInput('{Enter}')
+
+        ; export as mp3 with alt+f+e+3 (f=file, e=export, 3=mp3)
+        SendInput('!fe3')
+
+        ; wait Export Audio dialog to open
+        WinWait('Export Audio')
+
+        ; overwrite the existing file
+        SendInput('{Enter}')
+
+        ; wait for overwrite Warning dialog
+        WinWait('Warning')
+
+        ; accept warning
+        SendInput('{Enter}')
+
+        ; wait for Edit Metadata Tags dialog to appear
+        WinWait('Edit Metadata Tags')
+
+        ; clear all audio metadata tags with alt+e
+        SendInput('!e')
+
+        ; export file
+        SendInput('{Enter}')
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe EXCEL.exe')
@@ -644,8 +716,10 @@ SetTitleMatchMode(2)
 #HotIf WinActive('ahk_exe notepad++.exe')
     ^WheelUp::
     ^WheelDown::
+    ^NumpadAdd::
+    ^NumpadSub::
     {
-        ; disable Ctrl+Wheel which changes font size
+        ; disable Ctrl+Wheel and +/- zoom which changes font size
     }
 
     ; Ctrl+Shift+A to lookup selected text on the web
@@ -938,6 +1012,15 @@ selectCurrentWord()
     SendInput('{Right}')
 
     ; ctrl+shift+left to select the entire word
+    SendInput('^+{Left}')
+}
+
+; the more complex 'selectCurrentWord' requires Ctrl+C to copy and check selection
+; this simpler function avoids that by ignoring whitespace
+selectCurrentWordBasic()
+{
+    ; ctrl+right to move cursor over, then ctrl+shift+left to select the word
+    SendInput('^{Right}')
     SendInput('^+{Left}')
 }
 
