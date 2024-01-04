@@ -9,7 +9,7 @@
 
 if A_ComputerName == 'LAPTOP-JSOBNV2D'
 {
-    ; Enable NumLock
+    ; permanently enable Num Lock
     SetNumLockState('AlwaysOn')
 }
 
@@ -539,7 +539,6 @@ SetTitleMatchMode(2)
 #HotIf
 
 #HotIf WinActive('ahk_exe WINWORD.exe')
-    
     /*
     ; Map Ctrl+Enter to insert line below and move cursor
     ; Note: currently disabled, interferes with Insert Page Break
@@ -657,12 +656,18 @@ SetTitleMatchMode(2)
 
     ; Ctrl+K to use Find dialog in top right (like Firefox)
     ^k::^f
+
+    ; Map Ctrl+D to End
+    ^d::End
+
+    ; Map Ctrl+M to Home
+    ^m::Home
 #HotIf
 
 #HotIf WinActive('ahk_exe Audacity.exe')
     ; Ctrl+Backspace
     ^BS::SendInput('^+{Left}{Delete}')
-    
+
     ; utility to balance audio, clear metadata tags, and export over original file
     ; ctrl+shift+a
     ^+a::
@@ -744,6 +749,16 @@ SetTitleMatchMode(2)
     {
         deleteLineLeft()
     }
+
+    ; these notepad++ settings seem to be lost when installing updates
+    ; Map Ctrl+M to Home
+    ^m::Home
+
+    ; Map Ctrl+D to End
+    ^d::End
+
+    ; Map Ctrl+E to Ctrl+D
+    ^e::^d
 #HotIf
 
 ; Microsoft PowerPoint
@@ -1086,5 +1101,3 @@ deleteLineRight()
 {
     SendInput('{Shift Down}{End}{Shift Up}{Delete}')
 }
-
-; ---

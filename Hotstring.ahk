@@ -12,7 +12,7 @@
 ; ~ = triggers both the key and your callback. Ex: ~a::MsgBox will trigger both a message box and 'a' press.
 
 ; replace after typing 'btw' plus an ending char
-::btw::by the way
+;::btw::by the way
 
 ; '*': replace immediately (does not wait for ending character)
 :*:idk::i don't know
@@ -29,3 +29,12 @@
 ; use brackets to escape characters
 ; replace text with literal '!'. Without braces it would be treated as 'Alt'
 :*:exclamation::{!}
+
+; 'X' will execute a function
+; use A_ThisHotkey to get the autohotkey which was triggered
+:X:aaa::executeFcn
+
+executeFcn()
+{
+    MsgBox(A_ThisHotkey)
+}
