@@ -54,14 +54,17 @@
 
     ::cppHeapFunction::
     (
-        // compare pair<int, int>
-        auto fcn = [](pair<int, int> &left, pair<int, int> &right)
+        struct CustomComparator
         {
-            return left.first > right.first;
+            // functor to compare two values. this returns which value goes on *bottom*
+            bool operator()(Data &left, Data &right)
+            {
+                return left.x > right.x;
+            };
         };
 
-        //             <data type>     vector<data type>      <comp fcn type>        <fcn>
-        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(fcn)> minHeap(fcn);
+        //           <dtype> vector<dtype> <comparator>
+        priority_queue<Data, vector<Data>, CustomComparator> minHeap;
     )
 
     ::cppLinearIndex::
@@ -180,24 +183,24 @@
         {
         public:
             UnionFind(int n)
-                : _parent(n), _rank(n, 1)
+                : parent(n), rank(n, 1)
             {
                 // by default, every node is its own parent
                 // in a disconnected component
                 for (int i = 0; i < n; ++i)
-                    _parent[i] = i;
+                    parent[i] = i;
             }
 
             // return root of n
             int find(int n)
             {
                 // path compression
-                while (n != _parent[n])
+                while (n != parent[n])
                 {
                     // update parents as you iterate so that
                     // subsequent calls are faster
-                    _parent[n] = _parent[_parent[n]];
-                    n = _parent[n];
+                    parent[n] = parent[parent[n]];
+                    n = parent[n];
                 }
 
                 return n;
@@ -213,22 +216,190 @@
 
                 // always merge the small rank into the big rank for better performance
                 // this keeps the tree height shallow
-                if (_rank[p1] > _rank[p2])
+                if (rank[p1] > rank[p2])
                 {
                     // p1 bigger, so merge p2 into p1
-                    _rank[p1] += _rank[p2];
-                    _parent[p2] = p1;
+                    rank[p1] += rank[p2];
+                    parent[p2] = p1;
                 }
                 else
                 {
                     // p2 bigger, merge p1 into p2
-                    _rank[p2] += _rank[p1];
-                    _parent[p1] = p2;
+                    rank[p2] += rank[p1];
+                    parent[p1] = p2;
                 }
             }
 
-            vector<int> _parent;
-            vector<int> _rank;
+            vector<int> parent;
+            vector<int> rank;
         };
+    )
+
+    ::cppSortedIndexes::
+    (
+        template <typename T>
+        vector<int> sortedIndexes(const vector<T> &input)
+        {
+            vector<int> output(input.size());
+            // create [0, 1, 2, 3, ..., N-1]
+            iota(output.begin(), output.end(), 0);
+
+            // sort indexes by comparing input *values*
+            sort(output.begin(), output.end(), [&](int leftIdx, int rightIdx)
+            {
+                return input[leftIdx] < input[rightIdx];
+            });
+
+            return output;
+        }
+    )
+
+    ::cppStringJoin::
+    (
+        string join(const vector<string> &input, const string &separator)
+        {
+            string result;
+            for (int i = 0; i < input.size(); ++i)
+            {
+                result += input[i];
+                result += separator;
+            }
+
+            result = result.substr(0, result.size() - separator.size());
+            return result;
+        }
+    )
+
+    ::cppStringSplit::
+    (
+        vector<string> split(const string &input, const string &separator)
+        {
+            vector<string> result;
+            int start = 0;
+            int end = input.find(separator);
+
+            while (end != string::npos)
+            {
+                result.push_back(input.substr(start, end - start));
+                start = end + separator.length();
+                end = input.find(separator, start);
+            }
+
+            result.push_back(input.substr(start, end));
+            return result;
+        }
+    )
+
+    ::cppStringReplace::
+    (
+        // ex: sr("test testing", "test", "build") => "build building"
+        string stringReplace(const string &source, const string &from, const string &to)
+        {
+            string ret = source;
+            size_t start_pos = 0;
+            while ((start_pos = ret.find(from, start_pos)) != string::npos)
+            {
+                ret.replace(start_pos, from.length(), to);
+                start_pos += to.length(); // handles case where 'to' is a substring of 'from'
+            }
+            return ret;
+        }
+    )
+
+    ::cppOmpTask::
+    (
+        int _sumTree(TreeNode* node)
+        {
+            if (node == nullptr)
+                return 0;
+
+            int leftSum = 0, rightSum = 0;
+
+            // shared() is used so that the result exists beyond the scope
+            // firstprivate is used to preserve node value in omp
+            #pragma omp task shared(leftSum) firstprivate(node)
+            {
+                leftSum = _sumTree(node->left);
+            }
+
+            #pragma omp task shared(rightSum) firstprivate(node)
+            {
+                rightSum = _sumTree(node->right);
+            }
+
+            #pragma omp taskwait // wait for tasks to complete
+
+            // combine this node result with child results
+            return node->value + leftSum + rightSum;
+        }
+
+        int sumTree(TreeNode *node)
+        {
+            int totalSum = 0;
+
+            // create one parallel region to use for *all* recursive calls
+            #pragma omp parallel
+            {
+                #pragma omp single // ensure block is only called once
+                totalSum = _sumTree(node);
+            }
+
+            return totalSum;
+        }
+    )
+
+    ::cppPrintContainer::
+    (
+        template <typename T>
+        void printContainer(T &container)
+        {
+            for (auto it = begin(container); it != end(container); ++it)
+                cout << *it << " ";
+
+            cout << "\n";
+        }
+    )
+
+    ::cppCycleDetection::
+    (
+        bool cycleDetection(GraphNode *node, unordered_set<GraphNode *> &allVisitedNodes,
+                            unordered_set<GraphNode *> &currentPath)
+        {
+            if (currentPath.contains(node))
+                return true; // found back edge in current path, therefore it has a cycle
+            else if (allVisitedNodes.contains(node))
+                return false; // visited before and did not find a cycle, return early
+
+            // visit current
+            allVisitedNodes.insert(node);
+            currentPath.insert(node);
+
+            // recursively call children
+            for (GraphNode *child : node->adjacencyList)
+            {
+                if (cycleDetection(child, allVisitedNodes, currentPath))
+                    return true; // one cycle is enough
+            }
+
+            /*
+            1 --> 2
+             \    |
+              \   v
+               -> 3
+            */
+            currentPath.erase(node); // backtrack
+            return false;
+        }
+    )
+
+    ::cppBellmanFord::
+    (
+        // init distances to inf
+        // init src distance to zero
+        // for num steps (often V-1):
+        //     get each node and edge:
+        //         if distances[src] != inf:
+        //             if distances[src] + weight < distances[dst]:
+        //                 distances[dst] = distances[src] + weight 
     )
 #HotIf
