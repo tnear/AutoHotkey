@@ -687,20 +687,20 @@ SetTitleMatchMode(2)
         ; export as mp3 with alt+f+e+3 (f=file, e=export, 3=mp3)
         SendInput('!fe3')
 
-        ; wait Export Audio dialog to open
-        WinWait('Export Audio')
+        ; wait Export Audio dialog to open (wait 3 seconds)
+        WinWait('Export Audio', , 3)
 
         ; overwrite the existing file
         SendInput('{Enter}')
 
-        ; wait for overwrite Warning dialog
-        WinWait('Warning')
+        ; wait for overwrite Warning dialog (wait 3 seconds)
+        WinWait('Warning', , 3)
 
         ; accept warning
         SendInput('{Enter}')
 
-        ; wait for Edit Metadata Tags dialog to appear
-        WinWait('Edit Metadata Tags')
+        ; wait for Edit Metadata Tags dialog to appear (wait 3 seconds)
+        WinWait('Edit Metadata Tags', , 3)
 
         ; clear all audio metadata tags with alt+e
         SendInput('!e')
@@ -759,6 +759,9 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+E to Ctrl+D
     ^e::^d
+
+    ; Map Ctrl+N (normally inserts unicode char) to Ctrl+T (which creates a new tab)
+    ^n::^t
 #HotIf
 
 ; Microsoft PowerPoint

@@ -88,19 +88,6 @@
         }
     )
 
-    ::cppPrintMatrix::
-    (
-        void printMatrix(const vector<vector<int>> &v)
-        {
-            for (int row = 0; row < v.size(); ++row)
-            {
-                for (int col = 0; col < v[0].size(); ++col)
-                    cout << v[row][col] << " ";
-                cout << endl;
-            }
-        }
-    )
-
     ::cppRemoveDuplicates::
     (
         vec.erase(unique(vec.begin(), vec.end()), vec.end());
@@ -207,12 +194,12 @@
             }
 
             // union (combine) components belonging to n1 and n2
-            void unionSets(int n1, int n2)
+            bool unionSets(int n1, int n2)
             {
                 int p1 = find(n1);
                 int p2 = find(n2);
                 if (p1 == p2)
-                    return; // already in same connected component
+                    return false; // already in same connected component
 
                 // always merge the small rank into the big rank for better performance
                 // this keeps the tree height shallow
@@ -228,6 +215,7 @@
                     rank[p2] += rank[p1];
                     parent[p1] = p2;
                 }
+                return true;
             }
 
             vector<int> parent;
@@ -292,7 +280,7 @@
 
     ::cppStringReplace::
     (
-        // ex: sr("test testing", "test", "build") => "build building"
+        // ex: stringReplace("test testing", "test", "build") => "build building"
         string stringReplace(const string &source, const string &from, const string &to)
         {
             string ret = source;
@@ -306,90 +294,45 @@
         }
     )
 
-    ::cppOmpTask::
+    ::cppStringTrim::
     (
-        int _sumTree(TreeNode* node)
+        string& trim(string &str)
         {
-            if (node == nullptr)
-                return 0;
-
-            int leftSum = 0, rightSum = 0;
-
-            // shared() is used so that the result exists beyond the scope
-            // firstprivate is used to preserve node value in omp
-            #pragma omp task shared(leftSum) firstprivate(node)
-            {
-                leftSum = _sumTree(node->left);
-            }
-
-            #pragma omp task shared(rightSum) firstprivate(node)
-            {
-                rightSum = _sumTree(node->right);
-            }
-
-            #pragma omp taskwait // wait for tasks to complete
-
-            // combine this node result with child results
-            return node->value + leftSum + rightSum;
-        }
-
-        int sumTree(TreeNode *node)
-        {
-            int totalSum = 0;
-
-            // create one parallel region to use for *all* recursive calls
-            #pragma omp parallel
-            {
-                #pragma omp single // ensure block is only called once
-                totalSum = _sumTree(node);
-            }
-
-            return totalSum;
+            str.erase(str.find_last_not_of(' ') + 1); // suffix spaces
+            str.erase(0, str.find_first_not_of(' ')); // prefix spaces
+            return str;
         }
     )
 
-    ::cppPrintContainer::
+    ::cppOmpTask::
     (
-        template <typename T>
-        void printContainer(T &container)
-        {
-            for (auto it = begin(container); it != end(container); ++it)
-                cout << *it << " ";
-
-            cout << "\n";
-        }
+        // parallel function:
+        //     #pragma omp task shared(ret) firstprivate(args)
+        //         ret = recurse(args)
+        //     #pragma omp task ...
+        //         ret = recurse(args)
+        //     #pragma omp taskwait
+        // driver function:
+        //     #pragma omp parallel
+        //         #pragma omp single
+        //             call parallel function
     )
 
     ::cppCycleDetection::
     (
-        bool cycleDetection(GraphNode *node, unordered_set<GraphNode *> &allVisitedNodes,
-                            unordered_set<GraphNode *> &currentPath)
-        {
-            if (currentPath.contains(node))
-                return true; // found back edge in current path, therefore it has a cycle
-            else if (allVisitedNodes.contains(node))
-                return false; // visited before and did not find a cycle, return early
-
-            // visit current
-            allVisitedNodes.insert(node);
-            currentPath.insert(node);
-
-            // recursively call children
-            for (GraphNode *child : node->adjacencyList)
-            {
-                if (cycleDetection(child, allVisitedNodes, currentPath))
-                    return true; // one cycle is enough
-            }
-
-            /*
-            1 --> 2
-             \    |
-              \   v
-               -> 3
-            */
-            currentPath.erase(node); // backtrack
-            return false;
-        }
+        // check if current path contains node
+        //     has cycle
+        // check if visited before
+        //     no cycle
+        // visit node (both current path and all visited)
+        // for each neighbor:
+        //     if hasCycle(child)
+        //         has cycle
+        // remove from current path (backtrack)
+        //  1 --> 2
+        //   \    |
+        //    \   v
+        //     -> 3
     )
 
     ::cppBellmanFord::
@@ -401,5 +344,130 @@
         //         if distances[src] != inf:
         //             if distances[src] + weight < distances[dst]:
         //                 distances[dst] = distances[src] + weight 
+    )
+
+    ::cppDijkstra::
+    (
+        // init distances to inf
+        // zero distance to src
+        // min heap containing {weight, node} (using std::greater)
+        // add src to heap
+        // while heap has data:
+        //     pop top
+        //     visit add neighbors of current
+        //     newWeight = currentWeight + neighborWeight
+        //     compare newWeight to distances[neighbor]:
+        //         update weight if better
+        //         add neighbor to heap
+    )
+
+    ::cppPrim::
+    (
+        // choose any start node (mst must visit all nodes)
+        // create min heap of {dist, node} (use std::greater)
+        // init heap to all src's neighbor distances
+        // init visited set to source
+        // while not all nodes have been visited:
+        //     get current (pop top)
+        //     add current to visited
+        //     iterate through all unvisited nodes:
+        //         compute distance from 'current' to unvisitedNode
+        //         add to {distance, unvisitedNode} to heap
+    )
+
+    ::cppPrint::
+    (
+        template <typename, typename = void_t<>>
+        struct has_mapped_type : false_type {};
+
+        template <typename T>
+        struct has_mapped_type<T, void_t<typename T::mapped_type>> : true_type {};
+
+        // print function for set, map, unordered_set, unordered_map
+        template <typename T>
+        void print(const T &container)
+        {
+            cout << "{ ";
+            for (const auto &element : container)
+            {
+                // check for map type
+                if constexpr (has_mapped_type<T>::value)
+                    cout << "(" << element.first << ": " << element.second << ") ";
+                else
+                    cout << element << " "; // for sets, directly print the element
+            }
+            cout << "}\n";
+        }
+
+        // specialization for vector
+        template <typename T>
+        void print(const vector<T> &vec)
+        {
+            cout << "[ ";
+            for (const auto &elem : vec)
+            {
+                cout << elem << " ";
+            }
+            cout << "]\n";
+        }
+
+        // specialization for 2D vectors
+        template <typename T>
+        void print(const vector<vector<T>> &vec)
+        {
+            cout << "2D:\n";
+            for (int i = 0; i < vec.size(); ++i)
+            {
+                cout << to_string(i) << ": ";
+                print(vec[i]); // call print() specialization for 1D vector
+            }
+            cout << '\n';
+        }
+    )
+
+    ::cppInterval::
+    (
+        // sort intervals by start time
+        // set current to be first interval
+        // iterate from idx=1 to end:
+        //     check if current overlaps:
+        //         expand current start/stop
+        //     otherwise: update current
+    )
+
+    ::cppSystemDesign::
+    (
+        - Requirements list
+        - Rate limiter. DoS attacks and accidental API usages
+        - Load balancer. User authentication, triaging
+        - Capacity. DAU, bandwidth, qps
+        - API for requirements
+        - Message queue. Scale each side independently
+        - Replication: reliability, fault-tolerance, and performance
+        - Sharding + sharding key
+        - Consistency. Ensure all nodes agree
+        - Caching. Avoid database hits
+        - Logging and metrics. Ex: latency, CPU usage, message queue size, cache hit rate, etc.
+            - Machine learning analytics
+            - Security
+    )
+
+    ::cppQuick::
+    (
+        // ex: [1  4  2  5  3]
+        //     c,v         p,r      c=current, v=pivotPtr, p=pivotValue, r=right
+        // 1 < 3, so swap c&v and increment v
+        //     [1  4  2  5  3]
+        //        c,v      p,r
+        // 4 > 3, so do nothing
+        //     [1  4  2  5  3]
+        //         v  c    p,r
+        // c < 3, so swap c&v and increment v
+        //     [1  2  4  5  3]
+        //            v  c p,r
+        // 5 > 3 so do nothing
+        // lastly, swap pivot value its proper place by swapping v,p:
+        //     [1 2 *3* 5 4]
+        // return v=pivotPtr so that recursive calls solve [L, v-1] and [v+1, R]
     )
 #HotIf

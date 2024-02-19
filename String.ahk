@@ -104,7 +104,7 @@ ordinal()
     str := 'a'
     num := Ord(str)
 
-    ; num == 97 because ascii for 'a' is 96
+    ; num == 97 because ascii for 'a' is 97
     ; MsgBox(num)
 
     str := 'abc'
