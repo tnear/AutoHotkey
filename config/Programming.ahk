@@ -253,13 +253,13 @@
                 result += separator;
             }
 
-            result = result.substr(0, result.size() - separator.size());
-            return result;
+            return = result.substr(0, result.size() - separator.size());
         }
     )
 
     ::cppStringSplit::
     (
+        // ex: "a;b;c" -> ["a", "b", "c"] for ";" separator
         vector<string> split(const string &input, const string &separator)
         {
             vector<string> result;
@@ -316,6 +316,11 @@
         //     #pragma omp parallel
         //         #pragma omp single
         //             call parallel function
+        // critical section:
+        // #pragma omp critical
+        // {
+        //     // update shared state, container, etc.
+        // }
     )
 
     ::cppCycleDetection::
@@ -469,5 +474,52 @@
         // lastly, swap pivot value its proper place by swapping v,p:
         //     [1 2 *3* 5 4]
         // return v=pivotPtr so that recursive calls solve [L, v-1] and [v+1, R]
+    )
+
+    ::cppFile::
+    (
+        bool writeStringsToFile(const vector<string> &lines, const string &fileName)
+        {
+            // open a file in write mode
+            ofstream outFile(fileName);
+
+            if (!outFile.is_open())
+                return false; // cannot be opened
+
+            // write lines
+            for (const string &line : lines)
+                outFile << line << endl;
+
+            // close file when done
+            outFile.close();
+            return true;
+        }
+
+        vector<string> readLinesFromFile(const string &fileName)
+        {
+            // open file
+            ifstream inFile(fileName);
+
+            if (!inFile.is_open())
+                return {}; // could not open file
+
+            vector<string> lines;
+            string line;
+            // read each line
+            while (getline(inFile, line))
+            {
+                lines.push_back(line);
+            }
+
+            // close file when done
+            inFile.close();
+            return lines;
+        }
+    )
+
+    ::cppBound::
+    (
+        // lower_bound returns iterator to 1st elem NOT considered to go before VAL
+        // upper_bound returns iterator to 1st elem which goes after VAL
     )
 #HotIf

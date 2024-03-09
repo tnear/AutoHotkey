@@ -135,8 +135,8 @@ SetTitleMatchMode(2)
         selectCurrentWord()
     }
 
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -254,8 +254,8 @@ SetTitleMatchMode(2)
         selectCurrentWord()
     }
 
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -342,8 +342,8 @@ SetTitleMatchMode(2)
         moveLineDown()
     }
 
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -371,6 +371,41 @@ SetTitleMatchMode(2)
         moveCursorLeftOneWordWithSelection()
     }
 
+    /*
+    // ----Web browser programming start----
+    ^j::
+    {
+        moveCursorDown()
+    }
+
+    ^+j::
+    {
+        moveCursorDownWithSelection()
+    }
+
+    ^k::
+    {
+        moveCursorUp()
+    }
+
+    ; move line up with selection
+    ^+k::
+    {
+        moveCursorUpWithSelection()
+    }
+
+    ^l::
+    {
+        moveRightOneWord()
+    }
+
+    ^+l::
+    {
+        moveCursorRightOneWordWithSelection()
+    }
+    // ----Web browser programming stop----
+    */
+
     ; Ctrl+Comma
     ^,::
     {
@@ -388,6 +423,13 @@ SetTitleMatchMode(2)
     {
         copyCurrentLine()
     }
+
+    ; Ctrl+Shift+A to select all text, copy, and remove selection
+    ^+a::
+    {
+        selectAllAndCopy()
+    }
+    
 #HotIf
 
 #HotIf WinActive('ahk_exe chrome.exe')
@@ -412,8 +454,8 @@ SetTitleMatchMode(2)
     ; Map Ctrl+] to Page Down
     ^]::PgDn
 
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -576,16 +618,6 @@ SetTitleMatchMode(2)
         deleteLineRight()
     }
 
-    ^l::
-    {
-        moveRightOneWord()
-    }
-
-    ^+l::
-    {
-        moveCursorRightOneWordWithSelection()
-    }
-
     ^+h::
     {
         moveCursorLeftOneWordWithSelection()
@@ -610,6 +642,16 @@ SetTitleMatchMode(2)
     ^+k::
     {
         moveCursorUpWithSelection()
+    }
+
+    ^l::
+    {
+        moveRightOneWord()
+    }
+
+    ^+l::
+    {
+        moveCursorRightOneWordWithSelection()
     }
 
     ; map Ctrl+/ to Ctrl+H (replace)
@@ -638,6 +680,12 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+D to End
     ^d::End
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
 #HotIf
 
 ; Media Player Classic
@@ -647,6 +695,12 @@ SetTitleMatchMode(2)
 
     ; Ctrl+Backspace
     ^BS::SendInput('^+{Left}{Delete}')
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
 #HotIf
 
 ; File Explorer
@@ -662,6 +716,12 @@ SetTitleMatchMode(2)
 
     ; Map Ctrl+M to Home
     ^m::Home
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe Audacity.exe')
@@ -727,8 +787,8 @@ SetTitleMatchMode(2)
         ; disable Ctrl+Wheel and +/- zoom which changes font size
     }
 
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -788,8 +848,8 @@ SetTitleMatchMode(2)
 
 ; Visual Studio Code
 #HotIf WinActive('ahk_exe code.exe')
-    ; Ctrl+Shift+A to lookup selected text on the web
-    ^+a::
+    ; Ctrl+Shift+Q to lookup selected text on the web
+    ^+q::
     {
         lookupSelectedTextOnGoogle()
     }
@@ -1103,4 +1163,17 @@ deleteLineLeft()
 deleteLineRight()
 {
     SendInput('{Shift Down}{End}{Shift Up}{Delete}')
+}
+
+selectAllAndCopy()
+{
+    SendInput('^a')
+
+    ; copy this selection
+    SendInput('^c')
+    ClipWait
+    Sleep(10) ; necessary sleep
+    
+    MouseClick('left')
+    SendInput('{right}')
 }
