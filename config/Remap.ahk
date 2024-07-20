@@ -372,7 +372,7 @@ SetTitleMatchMode(2)
     }
 
     /*
-    // ----Web browser programming start----
+    ; ----Web browser programming start----
     ^j::
     {
         moveCursorDown()
@@ -403,7 +403,7 @@ SetTitleMatchMode(2)
     {
         moveCursorRightOneWordWithSelection()
     }
-    // ----Web browser programming stop----
+    ; ----Web browser programming stop----
     */
 
     ; Ctrl+Comma
@@ -858,6 +858,25 @@ SetTitleMatchMode(2)
     ^+c::
     {
         SendInput('{End}{Shift Down}{Home}{Shift Up}^c')
+    }
+    
+    f6::
+    {
+        ; do nothing
+    }
+#HotIf
+
+#HotIf WinActive('ahk_exe Zoom.exe')
+    ; Map Ctrl+D to End
+    ^d::End
+
+    ; Map Ctrl+M to Home
+    ^m::Home
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
     }
 #HotIf
 

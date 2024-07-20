@@ -244,38 +244,38 @@
 
     ::cppStringJoin::
     (
-        string join(const vector<string> &input, const string &separator)
-        {
-            string result;
-            for (int i = 0; i < input.size(); ++i)
-            {
-                result += input[i];
-                result += separator;
-            }
+string join(const vector<string> &input, const string &separator)
+{
+string result;
+for (int i = 0; i < input.size(); ++i)
+{
+result += input[i];
+result += separator;
+}
 
-            return = result.substr(0, result.size() - separator.size());
-        }
+return result.substr(0, result.size() - separator.size());
+}
     )
 
     ::cppStringSplit::
     (
-        // ex: "a;b;c" -> ["a", "b", "c"] for ";" separator
-        vector<string> split(const string &input, const string &separator)
-        {
-            vector<string> result;
-            int start = 0;
-            int end = input.find(separator);
+// ex: "a;b;c" -> ["a", "b", "c"] for ";" separator
+vector<string> split(const string &input, const string &separator)
+{
+vector<string> result;
+int start = 0;
+int end = input.find(separator);
 
-            while (end != string::npos)
-            {
-                result.push_back(input.substr(start, end - start));
-                start = end + separator.length();
-                end = input.find(separator, start);
-            }
+while (end != string::npos)
+{
+result.push_back(input.substr(start, end - start));
+start = end + separator.length();
+end = input.find(separator, start);
+}
 
-            result.push_back(input.substr(start, end));
-            return result;
-        }
+result.push_back(input.substr(start, end));
+return result;
+}
     )
 
     ::cppStringReplace::
@@ -521,5 +521,15 @@
     (
         // lower_bound returns iterator to 1st elem NOT considered to go before VAL
         // upper_bound returns iterator to 1st elem which goes after VAL
+    )
+
+    ::cpp4Dirs::
+    (
+        vector<pair<int, int>> dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+    )
+
+    ::cpp8Dirs::
+    (
+        vector<pair<int, int>> dirs = {{-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}};
     )
 #HotIf
