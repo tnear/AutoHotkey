@@ -7,10 +7,11 @@
 ; ! = Alt
 ; # = Windows key
 
-if A_ComputerName == 'LAPTOP-JSOBNV2D'
+;if A_ComputerName == 'LAPTOP-JSOBNV2D'
 {
     ; permanently enable Num Lock
     SetNumLockState('AlwaysOn')
+    ;SetCapsLockState('AlwaysOff')
 }
 
 ; Match MATLAB's Command window (not editor)
@@ -62,7 +63,7 @@ SetTitleMatchMode(2)
 
 ; Remap 4 keys above num pad (Virtual Box uses its own mapping):
 ; Note: this also checks the current computer name
-#HotIf !WinActive('ahk_exe VirtualBoxVM.exe') and A_ComputerName == 'LAPTOP-JSOBNV2D'
+#HotIf !WinActive('ahk_exe VirtualBoxVM.exe')
     Delete::Home
     Pause::PgUp
     PrintScreen::PgDn
@@ -70,8 +71,9 @@ SetTitleMatchMode(2)
 
     ; Enable delete and print screen after remapping 4 above:
     F12::Delete
-    ; F11::PrintScreen ; interferes with debugging, maybe shift + PrtScr instead?
-    +F11::PrintScreen
+    ; F11::PrintScreen ; interferes with debugging
+    ; set alt + F11 to print screen
+    !F11::PrintScreen
 #HotIf !WinActive()
 
 #HotIf WinActive('ahk_exe notepad.exe')
@@ -197,6 +199,18 @@ SetTitleMatchMode(2)
     ; use Ctrl+Shift+{=,-} to zoom instead
     ^+=::^=
     ^+-::^-
+
+    ; Ctrl+Shift+Backspace
+    ^+Backspace::
+    {
+        deleteLineLeft()
+    }
+
+    ; Ctrl+Shift+Delete (F12 is remapped to Delete)
+    ^+F12::
+    {
+        deleteLineRight()
+    }
 #HotIf
 
 #HotIf WinActive('ahk_exe Rainlendar2.exe')
@@ -669,6 +683,12 @@ SetTitleMatchMode(2)
         ; F8 enters extended mode, F8x2 selects word, Escape exits
         SendInput('{F8}{F8}{Esc}')
     }
+
+    ; Map Ctrl+M to Home
+    ^m::Home
+
+    ; Map Ctrl+D to End
+    ^d::End
 #HotIf
 
 #HotIf WinActive('ahk_exe MusicBee.exe')
@@ -793,6 +813,8 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
+    /*
+    Note: Notepad++ added this feature in 2023: Edit -> Multi-select Next -> Match Whole Word Only
     ; Ctrl+<comma>: select current word
     ^,::
     {
@@ -802,6 +824,7 @@ SetTitleMatchMode(2)
         ; works but requires opening the Find dialog then immediately closing:
         SendInput('^f{Escape}')
     }
+    */
 
     ; Ctrl+Shift+Backspace -- Notepad++ natively supports this but it deletes to column 0
     ; instead of ignoring leading whitespace
@@ -1195,4 +1218,42 @@ selectAllAndCopy()
     
     MouseClick('left')
     SendInput('{right}')
+}
+
+; F13 is hyper key (Caps Lock is mapped to F13 using Microsoft PowerToys)
+F13 & h::moveLeftOneWord()
+F13 & j::moveCursorDown()
+F13 & k::moveCursorUp()
+F13 & l::moveRightOneWord()
+
+F13 & u::Home
+F13 & p::End
+F13 & i::PgUp
+F13 & o::PgDn
+F13 & p::PgDn
+
+F13 & d::End
+F13 & m::Home
+
+F13 & f::^f
+F13 & t::^t
+/*
+F13 & ,::
+{
+    ;SendEvent("{Ctrl Down}{,}{Ctrl Up}") (doesn't work)
+    ;SendInput('^{,}') ; ctrl + comma (doesn't work)
+}
+*/
+
+; ctrl + backspace
+F13 & Backspace::SendInput('^{Backspace}')
+; +(F13 & Backspace)::deleteLineLeft()
+; ctrl + delete
+F13 & F12::SendInput('^{Delete}')
+
+; left shift + right shift to toggle caps lock
+;<>::ToggleCapsLock()
+
+ToggleCapsLock() {
+    SetCapsLockState(GetKeyState('CapsLock', 'T') ? 'Off' : 'On')
 }
