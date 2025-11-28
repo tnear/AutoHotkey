@@ -1226,21 +1226,22 @@ F13 & j::moveCursorDown()
 F13 & k::moveCursorUp()
 F13 & l::moveRightOneWord()
 
-F13 & u::Home
-F13 & p::End
-F13 & i::PgUp
-F13 & o::PgDn
-F13 & p::PgDn
-
+; navigation
 F13 & d::End
 F13 & m::Home
+F13 & u::^Home
+F13 & p::^End
 
+; conveniences
 F13 & f::^f
 F13 & t::^t
 F13 & w::^w
 F13 & r::^r
 F13 & a::^a
 F13 & b::^b
+F13 & g::^g
+F13 & [::^[
+F13 & ]::^]
 
 /*
 F13 & ,::
