@@ -813,19 +813,6 @@ SetTitleMatchMode(2)
         lookupSelectedTextOnGoogle()
     }
 
-    /*
-    Note: Notepad++ added this feature in 2023: Edit -> Multi-select Next -> Match Whole Word Only
-    ; Ctrl+<comma>: select current word
-    ^,::
-    {
-        ; Note: this doesn't work when the cursor is at the far right of the last word on a line
-        ;SendInput('{Right}^{Left}^+{Right}')
-
-        ; works but requires opening the Find dialog then immediately closing:
-        SendInput('^f{Escape}')
-    }
-    */
-
     ; Ctrl+Shift+Backspace -- Notepad++ natively supports this but it deletes to column 0
     ; instead of ignoring leading whitespace
     ^+Backspace::
@@ -1231,6 +1218,8 @@ F13 & d::End
 F13 & m::Home
 F13 & u::^Home
 F13 & p::^End
+F13 & i::PgUp
+F13 & o::PgDn
 
 ; conveniences
 F13 & f::^f
