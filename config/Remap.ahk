@@ -61,20 +61,16 @@ SetTitleMatchMode(2)
     }
 #HotIf
 
-; Remap 4 keys above num pad (Virtual Box uses its own mapping):
-; Note: this also checks the current computer name
-#HotIf !WinActive('ahk_exe VirtualBoxVM.exe')
-    Delete::Home
-    Pause::PgUp
-    PrintScreen::PgDn
-    Home::End
+Delete::Home
+Pause::PgUp
+PrintScreen::PgDn
+Home::End
 
-    ; Enable delete and print screen after remapping 4 above:
-    F12::Delete
-    ; F11::PrintScreen ; interferes with debugging
-    ; set alt + F11 to print screen
-    !F11::PrintScreen
-#HotIf !WinActive()
+; Enable delete and print screen after remapping 4 above:
+F12::Delete
+; F11::PrintScreen ; interferes with debugging
+; set alt + F11 to print screen
+!F11::PrintScreen
 
 #HotIf WinActive('ahk_exe notepad.exe')
     ; Map Ctrl+D to End
@@ -1252,3 +1248,70 @@ F13 & F12::SendInput('^{Delete}')
 ToggleCapsLock() {
     SetCapsLockState(GetKeyState('CapsLock', 'T') ? 'Off' : 'On')
 }
+
+; Flow
+#HotIf WinActive("ahk_exe firefox.exe")
+^+f::
+{
+    ; ---------- Configuration (primary monitor screen pixels) ----------
+    AX := 1400, AY := 1380   ; Point A
+    BX := 1900, BY := 800    ; Point B
+    CX := 1800, CY := 380    ; Point C
+    MoveSpeed := 13          ; 0 = instant, 100 = slowest
+
+    CoordMode "Mouse", "Screen"
+
+    ; Remember which Firefox window was active when the hotkey was pressed
+    hwnd := WinExist("A")
+    target := "ahk_id " hwnd
+
+    ir := InputBox("How many iterations?", "Mouse Mover", "w250 h130", "4")
+    if ir.Result != "OK"
+        return
+
+    if !IsInteger(ir.Value) || ir.Value < 1 {
+        MsgBox "Please enter a whole number of 1 or more.", "Mouse Mover", "Icon!"
+        return
+    }
+
+    ; Make sure the same Firefox window is active again after the prompt closes
+    if !WinWaitActive(target, , 2)
+        return
+
+    Loop Integer(ir.Value) {
+        ; Ensure browser is active before submitting
+        if !WinActive(target)
+            break
+        MouseMove AX, AY, MoveSpeed
+        Sleep 75
+        Click
+        Sleep 75
+
+        ; Ensure browser is active before submitting
+        if !WinActive(target)
+            break
+        Send "^v"
+        Sleep 100
+
+        ; Ensure browser is active before submitting
+        if !WinActive(target)
+            break
+        Send "{Enter}"
+
+        MouseMove BX, BY, MoveSpeed
+        Sleep 700
+        Click
+
+        Send "{Home}"
+        Sleep 300
+
+        ; Ensure browser is active before submitting
+        if !WinActive(target)
+            break
+        MouseMove CX, CY, MoveSpeed
+        Sleep 350
+        Click
+        Sleep 150
+    }
+}
+#HotIf
